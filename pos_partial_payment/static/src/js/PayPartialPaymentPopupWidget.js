@@ -44,6 +44,7 @@ odoo.define('pos_partial_payment.PayPartialPaymentPopupWidget', function(require
 							date:moment(new Date()).locale('en').format("YYYY-MM-DD HH:mm"),
 						});
 					});
+
 				}else{
 					await self.rpc({
 						model: 'res.partner',
@@ -61,49 +62,49 @@ odoo.define('pos_partial_payment.PayPartialPaymentPopupWidget', function(require
 							});
 						}
 						if (output <= partner_id.custom_credit){
+
+
 							// self.rpc({
-							// 	model: 'pos.order',
-							// 	method: 'create_customer_payment',
-							// 	args: [0, partner_id.id, payment_type, entered_amount],
-							// }).then(function(output) {
-							// 	// alert('Customer Payment Created !!!!');
+							// 	model: 'res.partner',
+							// 	method: 'pay_partial_payment',
+							// 	args: [partner_id ? partner_id.id : 0, entered_amount, partial_journal,payment_type,order.pos_session_id],
+							// }).then(function(journal_entry) {
 							// 	var partial = partner_id.custom_credit - entered_amount;
 							// 	self.rpc({
 							// 		model: 'res.partner',
 							// 		method: 'write',
 							// 		args: [[partner_id.id], {'custom_credit': partial}],
 							// 	});
-							//
 							// 	self.trigger('close-popup');
-							//
 							// 	self.showTempScreen('PartialPayReceiptScreen',{
-							// 		journal_entry : output,
+							// 		journal_entry : journal_entry,
 							// 		partner_id : partner_id,
 							// 		amount: entered_amount,
 							// 		date:moment(new Date()).locale('en').format("YYYY-MM-DD HH:mm"),
 							// 	});
-							//
 							// });
 
 							self.rpc({
-								model: 'res.partner',
-								method: 'pay_partial_payment',
-								args: [partner_id ? partner_id.id : 0, entered_amount, partial_journal,payment_type,order.pos_session_id],
-							}).then(function(journal_entry) {
+								model: 'pos.order',
+								method: 'create_customer_payment',
+								args: [0, partner_id.id, payment_type, entered_amount],
+							}).then(function(output) {
 								var partial = partner_id.custom_credit - entered_amount;
 								self.rpc({
 									model: 'res.partner',
 									method: 'write',
 									args: [[partner_id.id], {'custom_credit': partial}],
 								});
+								// alert('Customer Payment Created !!!!');
 								self.trigger('close-popup');
 								self.showTempScreen('PartialPayReceiptScreen',{
-									journal_entry : journal_entry,
+									journal_entry : output,
 									partner_id : partner_id,
 									amount: entered_amount,
 									date:moment(new Date()).locale('en').format("YYYY-MM-DD HH:mm"),
 								});
 							});
+
 						}
 					});
 				}

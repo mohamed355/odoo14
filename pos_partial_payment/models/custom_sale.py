@@ -58,12 +58,12 @@ class res_partner(models.Model):
 		if cr_journal_obj.default_account_id.currency_id.id and session.company_id.currency_id.id:
 			if session.company_id.currency_id.id != cr_journal_obj.default_account_id.currency_id.id:
 				# partner_line = {'account_id':self.property_account_receivable_id.id,
-				partner_line = {'account_id':paid_journal_id.default_account_id.id,
+				partner_line = {'account_id':self.property_account_receivable_id.id,
 					'name':'/',
 					'date':date.today(),
 					'partner_id': self.id,
-					'debit': 0.0,
-					'credit':diff_amount,
+					'credit': 0.0,
+					'debit':diff_amount,
 				}
 				lines.append(partner_line)
 				pos_line  = {
@@ -73,17 +73,17 @@ class res_partner(models.Model):
 					'amount_currency' : float(amount),
 					'date':date.today(),
 					'partner_id': self.id,
-					'credit': 0.0,
-					'debit':diff_amount,
+					'credit': diff_amount,
+					'debit':0.0,
 				}
 				lines.append(pos_line)
 			else:
-				partner_line = {'account_id':paid_journal_id.default_account_id.id,
+				partner_line = {'account_id':self.property_account_receivable_id.id,
 					'name':'/',
 					'date':date.today(),
 					'partner_id': self.id,
-					'debit': 0.0,
-					'credit':float(amount),
+					'debit': float(amount),
+					'credit':0.0,
 				}
 				lines.append(partner_line)
 				pos_line  = {
@@ -91,17 +91,17 @@ class res_partner(models.Model):
 					'name':'POS Payment',
 					'date':date.today(),
 					'partner_id': self.id,
-					'credit': 0.0,
-					'debit':float(amount),
+					'debit': 0.0,
+					'credit':float(amount),
 				}
 				lines.append(pos_line)
 		else:
-			partner_line = {'account_id':paid_journal_id.default_account_id.id,
+			partner_line = {'account_id':self.property_account_receivable_id.id,
 				'name':'/',
 				'date':date.today(),
 				'partner_id': self.id,
-				'debit': 0.0,
-				'credit':float(amount),
+				'credit': 0.0,
+				'debit':float(amount),
 			}
 			lines.append(partner_line)
 			pos_line  = {
@@ -109,8 +109,8 @@ class res_partner(models.Model):
 				'name':'POS Payment',
 				'date':date.today(),
 				'partner_id': self.id,
-				'credit': 0.0,
-				'debit':float(amount),
+				'debit': 0.0,
+				'credit':float(amount),
 			}
 			lines.append(pos_line)
 		line_list = [(0, 0, x) for x in lines]
@@ -118,7 +118,7 @@ class res_partner(models.Model):
 			'ref' : session.name,
 			'partner_id':self.id,
 			'date':date.today(),
-			'journal_id':journal_id,
+			'journal_id':cr_journal_obj.id,
 			'line_ids':line_list
 		})
 		move_id.action_post()
@@ -171,6 +171,8 @@ class account_journal(models.Model):
 	_inherit = 'account.journal'
 
 	is_credit = fields.Boolean(string='Is Credit')
+	default_account_id = fields.Many2one(comodel_name='account.account', check_company=True, copy=False, ondelete='restrict',string='Default Account',domain="")
+
 
 
 class account_journal(models.Model):

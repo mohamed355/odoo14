@@ -328,13 +328,14 @@
     </t>
 
 <!-- add KitchenReceipt in receipt -->
-    <!-- <t t-name="KitchenReceiptScreen" t-inherit="point_of_sale.ReceiptScreen" t-inherit-mode="extension" owl="1">
+    <t t-name="KitchenReceiptScreen" t-inherit="point_of_sale.ReceiptScreen" t-inherit-mode="extension" owl="1">
         <xpath expr="//div[hasclass('pos-receipt-container')]" position="inside">
-          <KitchenReceipt order="currentOrder" t-ref="kitchen-receipt" />
-
+          <t t-if="!env.pos.config.hide_kitchen_receipt">
+            <KitchenReceipt order="currentOrder" t-ref="kitchen-receipt" />
+          </t>
         </xpath>
 
-    </t> -->
+    </t>
 
     <t t-name="KitchenReceipt" owl="1">
       <div class="pos-receipt">

@@ -84,6 +84,7 @@ odoo.define('pos_partial_payment.PaymentScreenWidget', function(require){
 												'body': self.env._t('You cannot Pay More than Total Amount'),
 											});
 										}else{
+											console.log("currentOrder.get_change() > 0");
 											self.rpc({
 												model: 'res.partner',
 												method: 'update_partner_credit',
@@ -117,6 +118,7 @@ odoo.define('pos_partial_payment.PaymentScreenWidget', function(require){
 										});
 									}
 									else{
+										console.log("limit_amount > client.limit_credit");
 										self.rpc({
 											model: 'res.partner',
 											method: 'update_partner_credit',
