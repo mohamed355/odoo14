@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<odoo>
+  <record id="action_bank_statement" model="ir.actions.act_window">
+      <field name="name">Bank Statement</field>
+      <field name="type">ir.actions.act_window</field>
+      <field name="res_model">account.bank.statement</field>
+      <field name="view_mode">tree,form</field>
+      <field name="search_view_id" ref="account.view_bank_statement_search" />
+      <field name="view_id" ref="account.view_bank_statement_tree"/>
+  </record>
+
+  <menuitem
+      id="menu_bank_statement"
+      name="Bank Statement"
+      parent="point_of_sale.menu_point_config_product"
+      sequence="1"
+      action="action_bank_statement"
+      groups="point_of_sale.group_pos_manager"/>
+
+</odoo>

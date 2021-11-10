@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+ <t t-name="OrderReceipt" t-inherit="point_of_sale.OrderReceipt" t-inherit-mode="extension" owl="1">
+
+
+
+      <!-- QR Code-->
+       <xpath expr="//div[hasclass('pos-receipt-order-data')]" position="before">
+            <div t-attf-id="qrcode_container">
+                <div id="qrcode"></div>
+                <!--<script type="text/javascript"> new QRCode(document.getElementById("qrcode_id"), qr_data);</script>-->
+                <script type="text/javascript">
+                    var qr_data ="
+                    Seller : <t t-esc="receipt.company.name"/>;
+                    Invoice_No : <t t-esc="receipt.name"/>;
+                    Date : <t t-esc="receipt.date.localestring"/>;
+                    Total_Vat : <t t-esc="env.pos.format_currency(receipt.total_tax)"/>;
+                    Total_Amount_Due : <t t-esc="env.pos.format_currency(receipt.total_with_tax)"/>;
+                    Vat_No :<t t-esc="receipt.company.vat"/><t>ؘ</t>";
+/
+                    //console.log('1-',qr_data);
+                    qr_data = qr_data.padEnd(220);
+                    var qrcode = new QRCode('qrcode' , {
+                    text: qr_data,
+                    width: 160,
+                    height: 160,
+                    colorDark : "#000000",
+                    colorLight : "#ffffff",
+                    correctLevel : QRCode.CorrectLevel.H
+                    });
+
+                    qrcode.makeCode(qr_data);
+
+                    $("#qrcode > img").css({"margin":"20px auto"});
+                </script>
+            </div>
+       </xpath>
+
+    </t>
+
+</templates>

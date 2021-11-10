@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<template id="assets_for_pos_advance_cash_payment" inherit_id="point_of_sale.assets">
+			<xpath expr="." position="inside">
+				<script type="text/javascript" src="/pos_advance_cash_payment/static/src/js/AdvancePaymentReceipt.js"></script>
+				<script type="text/javascript" src="/pos_advance_cash_payment/static/src/js/AdvancePaymentReceiptScreen.js"></script>
+				<script type="text/javascript" src="/pos_advance_cash_payment/static/src/js/AddPaymentPopupWidget.js"></script>
+				<script type="text/javascript" src="/pos_advance_cash_payment/static/src/js/ClientDetailsEdit.js"></script>
+				<script type="text/javascript" src="/pos_advance_cash_payment/static/src/js/ClientListScreen.js"></script>
+				<script type="text/javascript" src="/pos_advance_cash_payment/static/src/js/models.js"></script>
+
+			</xpath>
+		</template>
+
+	</data>
+</odoo>

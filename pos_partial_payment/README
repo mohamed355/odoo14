@@ -1,0 +1,19 @@
+
+Version 14.0.0.1 : (20/11/20)
+		-  Solve rpc issue 
+		- Write new method check_credit_validation() and update code for validateOrder() method
+		- Add "Pay credit" button in clientline beside "edit" button and pass selected client to popup 
+		- Discard process_order method and use action_pos_order_invoice() for partial credit invoice .
+		- Change layout of partial credit payment popup and rewrite code for payment receipt and screen.
+		- Refresh customers when customer button is clicked.
+
+
+Version 14.0.0.2 : (26/05/2021)
+- Solve Error While doing partial payment (local variable 'pos_line' referenced before assignment)
+
+Version 14.0.0.3 : (07/06/21)
+		- Show Jorunal entry name in receipt after credit recharge done.
+
+Version 14.0.0.4 : (28/06/21)
+		- Solved error while pay partial amount from the ClientDetails.
+		- Load ClientListScreenWidget using setInterval. for the update credit amount.

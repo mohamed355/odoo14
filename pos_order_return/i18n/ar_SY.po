@@ -1,0 +1,363 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* pos_order_return
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 14.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-09-21 17:59+0000\n"
+"PO-Revision-Date: 2021-09-21 17:59+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: pos_order_return
+#. openerp-web
+#: code:addons/pos_order_return/static/src/xml/pos_order_return.xml:0
+#, python-format
+msgid "(Non-Returnable)"
+msgstr "(غير قابل للارجاع)"
+
+#. module: pos_order_return
+#. openerp-web
+#: code:addons/pos_order_return/static/src/xml/pos_order_return.xml:0
+#, python-format
+msgid "(Unavailable In POS)"
+msgstr "(غير متوفر في نقاط البيع)"
+
+#. module: pos_order_return
+#. openerp-web
+#: code:addons/pos_order_return/static/src/xml/pos_order_return.xml:0
+#: code:addons/pos_order_return/static/src/xml/pos_order_return.xml:0
+#: code:addons/pos_order_return/static/src/xml/pos_order_return.xml:0
+#, python-format
+msgid "Cancel"
+msgstr "الغاء"
+
+#. module: pos_order_return
+#. openerp-web
+#: code:addons/pos_order_return/static/src/js/pos_order_return.js:0
+#, python-format
+msgid "Cannot Return This Order!!!"
+msgstr "لا يمكن ارجاع هذا الطلب!!!"
+
+#. module: pos_order_return
+#. openerp-web
+#: code:addons/pos_order_return/static/src/xml/pos_order_return.xml:0
+#, python-format
+msgid "Complete Return"
+msgstr "أكمل الارجاع"
+
+#. module: pos_order_return
+#. openerp-web
+#: code:addons/pos_order_return/static/src/xml/pos_order_return.xml:0
+#: code:addons/pos_order_return/static/src/xml/pos_order_return.xml:0
+#, python-format
+msgid "Customer:"
+msgstr "العميل"
+
+#. module: pos_order_return
+#. openerp-web
+#: code:addons/pos_order_return/static/src/xml/pos_order_return.xml:0
+#, python-format
+msgid "Date:"
+msgstr "التاريخ"
+
+#. module: pos_order_return
+#. openerp-web
+#: code:addons/pos_order_return/static/src/xml/pos_order_return.xml:0
+#, python-format
+msgid "Discount(%)"
+msgstr "الخصم(%)"
+
+#. module: pos_order_return
+#: model:ir.model.fields,field_description:pos_order_return.field_pos_order__display_name
+#: model:ir.model.fields,field_description:pos_order_return.field_pos_order_line__display_name
+#: model:ir.model.fields,field_description:pos_order_return.field_product_template__display_name
+msgid "Display Name"
+msgstr "الاسم المعروض"
+
+#. module: pos_order_return
+#. openerp-web
+#: code:addons/pos_order_return/static/src/xml/pos_order_return.xml:0
+#, python-format
+msgid "Exchange Order"
+msgstr "طلب الاستبدال"
+
+#. module: pos_order_return
+#: model:ir.model.fields.selection,name:pos_order_return.selection__pos_order__return_status__fully-returned
+msgid "Fully-Returned"
+msgstr "مرتجع مستكمل"
+
+#. module: pos_order_return
+#: model:ir.model.fields,field_description:pos_order_return.field_pos_order__id
+#: model:ir.model.fields,field_description:pos_order_return.field_pos_order_line__id
+#: model:ir.model.fields,field_description:pos_order_return.field_product_template__id
+msgid "ID"
+msgstr "المُعرف"
+
+#. module: pos_order_return
+#: model:ir.model.fields,field_description:pos_order_return.field_pos_order____last_update
+#: model:ir.model.fields,field_description:pos_order_return.field_pos_order_line____last_update
+#: model:ir.model.fields,field_description:pos_order_return.field_product_template____last_update
+msgid "Last Modified on"
+msgstr "آخر تعديل في"
+
+#. module: pos_order_return
+#: model:ir.model.fields,field_description:pos_order_return.field_pos_order_line__line_qty_returned
+msgid "Line Returned"
+msgstr "السطر المرتجع"
+
+#. module: pos_order_return
+#. openerp-web
+#: code:addons/pos_order_return/static/src/xml/pos_order_return.xml:0
+#, python-format
+msgid "Name:"
+msgstr "الاسم"
+
+#. module: pos_order_return
+#: model:ir.model.fields.selection,name:pos_order_return.selection__pos_order__return_status__non-returnable
+msgid "Non-Returnable"
+msgstr "غير قابل للارجاع"
+
+#. module: pos_order_return
+#: model:ir.model.fields,field_description:pos_order_return.field_product_product__not_returnable
+#: model:ir.model.fields,field_description:pos_order_return.field_product_template__not_returnable
+msgid "Not Returnable"
+msgstr "غير قابل للارجاع"
+
+#. module: pos_order_return
+#: model:ir.model.fields.selection,name:pos_order_return.selection__pos_order__return_status__-
+msgid "Not Returned"
+msgstr "غير مرتجع"
+
+#. module: pos_order_return
+#. openerp-web
+#: code:addons/pos_order_return/static/src/xml/pos_order_return.xml:0
+#, python-format
+msgid "OK"
+msgstr "تم"
+
+#. module: pos_order_return
+#. openerp-web
+#: code:addons/pos_order_return/static/src/xml/pos_order_return.xml:0
+#, python-format
+msgid "Order Details"
+msgstr "تفاصيل الطلب"
+
+#. module: pos_order_return
+#: model:ir.model.fields,field_description:pos_order_return.field_pos_order_line__original_line_id
+msgid "Original line"
+msgstr "السطر الأصلي"
+
+#. module: pos_order_return
+#: model:ir.model.fields.selection,name:pos_order_return.selection__pos_order__return_status__partially-returned
+msgid "Partially-Returned"
+msgstr "مرتجع جزئياً"
+
+#. module: pos_order_return
+#. openerp-web
+#: code:addons/pos_order_return/static/src/xml/pos_order_return.xml:0
+#, python-format
+msgid "Payment modes:"
+msgstr "طرق الدفع:"
+
+#. module: pos_order_return
+#: model:ir.model,name:pos_order_return.model_pos_order_line
+msgid "Point of Sale Order Lines"
+msgstr "بنود أمر نقطة البيع"
+
+#. module: pos_order_return
+#: model:ir.model,name:pos_order_return.model_pos_order
+msgid "Point of Sale Orders"
+msgstr "أوامر نقطة البيع"
+
+#. module: pos_order_return
+#. openerp-web
+#: code:addons/pos_order_return/static/src/xml/pos_order_return.xml:0
+#, python-format
+msgid "Price"
+msgstr "السعر"
+
+#. module: pos_order_return
+#. openerp-web
+#: code:addons/pos_order_return/static/src/xml/pos_order_return.xml:0
+#, python-format
+msgid "Product"
+msgstr "المنتج"
+
+#. module: pos_order_return
+#. openerp-web
+#: code:addons/pos_order_return/static/src/xml/pos_order_return.xml:0
+#, python-format
+msgid "Product ("
+msgstr "المنتج"
+
+#. module: pos_order_return
+#: model:ir.model,name:pos_order_return.model_product_template
+msgid "Product Template"
+msgstr "قالب المنتج"
+
+#. module: pos_order_return
+#. openerp-web
+#: code:addons/pos_order_return/static/src/xml/pos_order_return.xml:0
+#, python-format
+msgid "Qty"
+msgstr "الكمية"
+
+#. module: pos_order_return
+#. openerp-web
+#: code:addons/pos_order_return/static/src/xml/pos_order_return.xml:0
+#, python-format
+msgid "Quantity"
+msgstr "الكمية"
+
+#. module: pos_order_return
+#. openerp-web
+#: code:addons/pos_order_return/static/src/js/pos_order_return.js:0
+#, python-format
+msgid "Refund Already In Progress"
+msgstr "ارجاع المبلغ مازال جارِ"
+
+#. module: pos_order_return
+#. openerp-web
+#: code:addons/pos_order_return/static/src/js/pos_order_return.js:0
+#, python-format
+msgid ""
+"Refund order is already in progress. Please proceed with Order Reference "
+msgstr ""
+"طلب رد الأموال قيد التقدم بالفعل. الرجاء متابعة مرجع الطلب"
+
+#. module: pos_order_return
+#. openerp-web
+#: code:addons/pos_order_return/static/src/xml/pos_order_return.xml:0
+#, python-format
+msgid "Return"
+msgstr "ارجاع"
+
+#. module: pos_order_return
+#. openerp-web
+#: code:addons/pos_order_return/static/src/xml/pos_order_return.xml:0
+#: model:ir.model.fields,field_description:pos_order_return.field_pos_order__is_return_order
+#, python-format
+msgid "Return Order"
+msgstr "طلب الارجاع"
+
+#. module: pos_order_return
+#: model:ir.model.fields,field_description:pos_order_return.field_pos_order__return_order_id
+msgid "Return Order Of"
+msgstr "طلب ارجاع"
+
+#. module: pos_order_return
+#. openerp-web
+#: code:addons/pos_order_return/static/src/xml/pos_order_return.xml:0
+#, python-format
+msgid "Return Products"
+msgstr "ارجاع منتجات"
+
+#. module: pos_order_return
+#. openerp-web
+#: code:addons/pos_order_return/static/src/xml/pos_order_return.xml:0
+#, python-format
+msgid "Return Qty."
+msgstr "ارجاع كمية"
+
+#. module: pos_order_return
+#. openerp-web
+#: code:addons/pos_order_return/static/src/xml/pos_order_return.xml:0
+#: model:ir.model.fields,field_description:pos_order_return.field_pos_order__return_status
+#, python-format
+msgid "Return Status"
+msgstr "جالة الارجاع"
+
+#. module: pos_order_return
+#. openerp-web
+#: code:addons/pos_order_return/static/src/xml/pos_order_return.xml:0
+#, python-format
+msgid "Return/Refund"
+msgstr "الارجاع"
+
+#. module: pos_order_return
+#. openerp-web
+#: code:addons/pos_order_return/static/src/xml/pos_order_return.xml:0
+#, python-format
+msgid "Return/Refund:"
+msgstr "الارجاع"
+
+#. module: pos_order_return
+#. openerp-web
+#: code:addons/pos_order_return/static/src/xml/pos_order_return.xml:0
+#, python-format
+msgid "Returns"
+msgstr "مرتجعات"
+
+#. module: pos_order_return
+#. openerp-web
+#: code:addons/pos_order_return/static/src/xml/pos_order_return.xml:0
+#, python-format
+msgid "THIS IS A REFUND ORDER"
+msgstr "هذا طلب مرتجع"
+
+#. module: pos_order_return
+#. openerp-web
+#: code:addons/pos_order_return/static/src/xml/pos_order_return.xml:0
+#, python-format
+msgid "TOTAL"
+msgstr "الاجمالي"
+
+#. module: pos_order_return
+#. openerp-web
+#: code:addons/pos_order_return/static/src/xml/pos_order_return.xml:0
+#, python-format
+msgid "TOTAL Refund"
+msgstr "اجمالي المرتجع"
+
+#. module: pos_order_return
+#. openerp-web
+#: code:addons/pos_order_return/static/src/xml/pos_order_return.xml:0
+#, python-format
+msgid "Tax"
+msgstr "الضريبة"
+
+#. module: pos_order_return
+#. openerp-web
+#: code:addons/pos_order_return/static/src/js/pos_order_return.js:0
+#, python-format
+msgid ""
+"There are no returnable products left for this order. Maybe the products are"
+" Non-Returnable or unavailable in Point Of Sale!!"
+msgstr ""
+"لا توجد منتجات قابلة للإرجاع متبقية لهذا الطلب. ربما المنتجات"
+"غير قابل للإرجاع أو غير متوفر في نقاط البيع !!"
+
+#. module: pos_order_return
+#. openerp-web
+#: code:addons/pos_order_return/static/src/xml/pos_order_return.xml:0
+#, python-format
+msgid "Total"
+msgstr "الاجمالي"
+
+#. module: pos_order_return
+#. openerp-web
+#: code:addons/pos_order_return/static/src/xml/pos_order_return.xml:0
+#, python-format
+msgid "Unit Price"
+msgstr "سعر الوحدة"
+
+#. module: pos_order_return
+#. openerp-web
+#: code:addons/pos_order_return/static/src/js/pos_order_return.js:0
+#, python-format
+msgid "Warning !!!"
+msgstr "تحذير!!!"
+
+#. module: pos_order_return
+#. openerp-web
+#: code:addons/pos_order_return/static/src/js/pos_order_return.js:0
+#, python-format
+msgid "Warning!!!"
+msgstr "تحذير!!!"

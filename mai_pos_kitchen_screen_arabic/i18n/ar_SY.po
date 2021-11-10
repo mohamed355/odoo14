@@ -1,0 +1,298 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* mai_pos_kitchen_screen_arabic
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 14.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-09-21 17:30+0000\n"
+"PO-Revision-Date: 2021-09-21 17:30+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: mai_pos_kitchen_screen_arabic
+#. openerp-web
+#: code:addons/mai_pos_kitchen_screen_arabic/static/src/xml/templates.xml:0
+#, python-format
+msgid "% discount"
+msgstr "% خصم"
+
+#. module: mai_pos_kitchen_screen_arabic
+#. openerp-web
+#: code:addons/mai_pos_kitchen_screen_arabic/static/src/xml/templates.xml:0
+#, python-format
+msgid "AMOUNT"
+msgstr "المبلغ"
+
+#. module: mai_pos_kitchen_screen_arabic
+#: model:ir.model.fields,field_description:mai_pos_kitchen_screen_arabic.field_product_product__name_arabic
+#: model:ir.model.fields,field_description:mai_pos_kitchen_screen_arabic.field_product_template__name_arabic
+msgid "Arabic Name"
+msgstr "الاسم بالعربي"
+
+#. module: mai_pos_kitchen_screen_arabic
+#. openerp-web
+#: code:addons/mai_pos_kitchen_screen_arabic/static/src/xml/templates.xml:0
+#, python-format
+msgid "Change"
+msgstr "تغيير"
+
+#. module: mai_pos_kitchen_screen_arabic
+#. openerp-web
+#: code:addons/mai_pos_kitchen_screen_arabic/static/src/xml/templates.xml:0
+#: code:addons/mai_pos_kitchen_screen_arabic/static/src/xml/templates.xml:0
+#, python-format
+msgid "Customer"
+msgstr "العميل"
+
+#. module: mai_pos_kitchen_screen_arabic
+#. openerp-web
+#: code:addons/mai_pos_kitchen_screen_arabic/static/src/xml/templates.xml:0
+#: code:addons/mai_pos_kitchen_screen_arabic/static/src/xml/templates.xml:0
+#, python-format
+msgid "Date"
+msgstr "التاريخ"
+
+#. module: mai_pos_kitchen_screen_arabic
+#. openerp-web
+#: code:addons/mai_pos_kitchen_screen_arabic/static/src/xml/templates.xml:0
+#, python-format
+msgid "Discount"
+msgstr "خصم"
+
+#. module: mai_pos_kitchen_screen_arabic
+#: model:ir.model.fields,field_description:mai_pos_kitchen_screen_arabic.field_product_template__display_name
+msgid "Display Name"
+msgstr "الاسم المعروض"
+
+#. module: mai_pos_kitchen_screen_arabic
+#: model:ir.model.fields,field_description:mai_pos_kitchen_screen_arabic.field_product_template__id
+msgid "ID"
+msgstr "المُعرف"
+
+#. module: mai_pos_kitchen_screen_arabic
+#. openerp-web
+#: code:addons/mai_pos_kitchen_screen_arabic/static/src/xml/templates.xml:0
+#, python-format
+msgid "INVOICE فاتورة"
+msgstr ""
+
+#. module: mai_pos_kitchen_screen_arabic
+#. openerp-web
+#: code:addons/mai_pos_kitchen_screen_arabic/static/src/xml/templates.xml:0
+#: code:addons/mai_pos_kitchen_screen_arabic/static/src/xml/templates.xml:0
+#, python-format
+msgid "ITEM NAME"
+msgstr "اسم السلعة"
+
+#. module: mai_pos_kitchen_screen_arabic
+#. openerp-web
+#: code:addons/mai_pos_kitchen_screen_arabic/static/src/xml/templates.xml:0
+#: code:addons/mai_pos_kitchen_screen_arabic/static/src/xml/templates.xml:0
+#, python-format
+msgid "Invoice No"
+msgstr "رقم الفاتورة"
+
+#. module: mai_pos_kitchen_screen_arabic
+#: model:ir.model.fields,field_description:mai_pos_kitchen_screen_arabic.field_product_template____last_update
+msgid "Last Modified on"
+msgstr "آخر تعديل في"
+
+#. module: mai_pos_kitchen_screen_arabic
+#. openerp-web
+#: code:addons/mai_pos_kitchen_screen_arabic/static/src/xml/templates.xml:0
+#, python-format
+msgid "NET AMOUNT"
+msgstr "المبلغ الصافي"
+
+#. module: mai_pos_kitchen_screen_arabic
+#. openerp-web
+#: code:addons/mai_pos_kitchen_screen_arabic/static/src/xml/templates.xml:0
+#, python-format
+msgid "PRICE"
+msgstr "السعر"
+
+#. module: mai_pos_kitchen_screen_arabic
+#. openerp-web
+#: code:addons/mai_pos_kitchen_screen_arabic/static/src/js/SeparateReceiptPrint.js:0
+#, python-format
+msgid "Printing is not supported on some browsers"
+msgstr "الطباعة غير مدعمة في بعض المتصفحات"
+
+#. module: mai_pos_kitchen_screen_arabic
+#. openerp-web
+#: code:addons/mai_pos_kitchen_screen_arabic/static/src/js/SeparateReceiptPrint.js:0
+#, python-format
+msgid ""
+"Printing is not supported on some browsers due to no default printing "
+"protocol is available. It is possible to print your tickets by making use of"
+" an IoT Box."
+msgstr ""
+"الطباعة غير مدعومة في بعض المتصفحات بسبب عدم وجود طباعة افتراضية"
+"البروتوكول متاح. من الممكن طباعة التذاكر الخاصة بك عن طريق الاستفادة من"
+"صندوق إنترنت الأشياء."
+
+#. module: mai_pos_kitchen_screen_arabic
+#: model:ir.model,name:mai_pos_kitchen_screen_arabic.model_product_template
+msgid "Product Template"
+msgstr "قالب المنتج"
+
+#. module: mai_pos_kitchen_screen_arabic
+#. openerp-web
+#: code:addons/mai_pos_kitchen_screen_arabic/static/src/xml/templates.xml:0
+#: code:addons/mai_pos_kitchen_screen_arabic/static/src/xml/templates.xml:0
+#, python-format
+msgid "QTY"
+msgstr "الكمية"
+
+#. module: mai_pos_kitchen_screen_arabic
+#. openerp-web
+#: code:addons/mai_pos_kitchen_screen_arabic/static/src/xml/templates.xml:0
+#: code:addons/mai_pos_kitchen_screen_arabic/static/src/xml/templates.xml:0
+#, python-format
+msgid "Sales Person"
+msgstr "مندوب المبيعات"
+
+#. module: mai_pos_kitchen_screen_arabic
+#. openerp-web
+#: code:addons/mai_pos_kitchen_screen_arabic/static/src/xml/templates.xml:0
+#, python-format
+msgid "Served by"
+msgstr "تم بواسطة"
+
+#. module: mai_pos_kitchen_screen_arabic
+#. openerp-web
+#: code:addons/mai_pos_kitchen_screen_arabic/static/src/xml/templates.xml:0
+#, python-format
+msgid "TOTAL"
+msgstr "الاجمالي"
+
+#. module: mai_pos_kitchen_screen_arabic
+#. openerp-web
+#: code:addons/mai_pos_kitchen_screen_arabic/static/src/xml/templates.xml:0
+#, python-format
+msgid "VAT Reg. No"
+msgstr "رقم التسجيل الضريبي"
+
+#. module: mai_pos_kitchen_screen_arabic
+#. openerp-web
+#: code:addons/mai_pos_kitchen_screen_arabic/static/src/xml/templates.xml:0
+#, python-format
+msgid "With a"
+msgstr "باستخدام"
+
+#. module: mai_pos_kitchen_screen_arabic
+#. openerp-web
+#: code:addons/mai_pos_kitchen_screen_arabic/static/src/xml/templates.xml:0
+#, python-format
+msgid "استلم"
+msgstr "Receive"
+
+#. module: mai_pos_kitchen_screen_arabic
+#. openerp-web
+#: code:addons/mai_pos_kitchen_screen_arabic/static/src/xml/templates.xml:0
+#: code:addons/mai_pos_kitchen_screen_arabic/static/src/xml/templates.xml:0
+#, python-format
+msgid "اسم العنصر"
+msgstr "Item name"
+
+#. module: mai_pos_kitchen_screen_arabic
+#. openerp-web
+#: code:addons/mai_pos_kitchen_screen_arabic/static/src/xml/templates.xml:0
+#, python-format
+msgid "الباقي"
+msgstr "Residue"
+
+#. module: mai_pos_kitchen_screen_arabic
+#. openerp-web
+#: code:addons/mai_pos_kitchen_screen_arabic/static/src/xml/templates.xml:0
+#: code:addons/mai_pos_kitchen_screen_arabic/static/src/xml/templates.xml:0
+#, python-format
+msgid "التاريخ"
+msgstr "Date"
+
+#. module: mai_pos_kitchen_screen_arabic
+#. openerp-web
+#: code:addons/mai_pos_kitchen_screen_arabic/static/src/xml/templates.xml:0
+#, python-format
+msgid "السعر"
+msgstr "Price"
+
+#. module: mai_pos_kitchen_screen_arabic
+#. openerp-web
+#: code:addons/mai_pos_kitchen_screen_arabic/static/src/xml/templates.xml:0
+#, python-format
+msgid "الصافي"
+msgstr "Net"
+
+#. module: mai_pos_kitchen_screen_arabic
+#. openerp-web
+#: code:addons/mai_pos_kitchen_screen_arabic/static/src/xml/templates.xml:0
+#: code:addons/mai_pos_kitchen_screen_arabic/static/src/xml/templates.xml:0
+#, python-format
+msgid "العميل"
+msgstr "Customer"
+
+#. module: mai_pos_kitchen_screen_arabic
+#. openerp-web
+#: code:addons/mai_pos_kitchen_screen_arabic/static/src/xml/templates.xml:0
+#: code:addons/mai_pos_kitchen_screen_arabic/static/src/xml/templates.xml:0
+#, python-format
+msgid "الكمية"
+msgstr "Quantity"
+
+#. module: mai_pos_kitchen_screen_arabic
+#. openerp-web
+#: code:addons/mai_pos_kitchen_screen_arabic/static/src/xml/templates.xml:0
+#, python-format
+msgid "خصم"
+msgstr "Discount"
+
+#. module: mai_pos_kitchen_screen_arabic
+#. openerp-web
+#: code:addons/mai_pos_kitchen_screen_arabic/static/src/xml/templates.xml:0
+#, python-format
+msgid "رقم الضريبي"
+msgstr "VAT number"
+
+#. module: mai_pos_kitchen_screen_arabic
+#. openerp-web
+#: code:addons/mai_pos_kitchen_screen_arabic/static/src/xml/templates.xml:0
+#: code:addons/mai_pos_kitchen_screen_arabic/static/src/xml/templates.xml:0
+#, python-format
+msgid "رقم الفاتورة"
+msgstr "Invoice No."
+
+#. module: mai_pos_kitchen_screen_arabic
+#. openerp-web
+#: code:addons/mai_pos_kitchen_screen_arabic/static/src/xml/templates.xml:0
+#, python-format
+msgid "ضريبة"
+msgstr "Tax"
+
+#. module: mai_pos_kitchen_screen_arabic
+#. openerp-web
+#: code:addons/mai_pos_kitchen_screen_arabic/static/src/xml/templates.xml:0
+#, python-format
+msgid "مبلغ"
+msgstr "Amount"
+
+#. module: mai_pos_kitchen_screen_arabic
+#. openerp-web
+#: code:addons/mai_pos_kitchen_screen_arabic/static/src/xml/templates.xml:0
+#, python-format
+msgid "مجموع"
+msgstr "Total"
+
+#. module: mai_pos_kitchen_screen_arabic
+#. openerp-web
+#: code:addons/mai_pos_kitchen_screen_arabic/static/src/xml/templates.xml:0
+#: code:addons/mai_pos_kitchen_screen_arabic/static/src/xml/templates.xml:0
+#, python-format
+msgid "مندوب مبيعات"
+msgstr "Sales person"
