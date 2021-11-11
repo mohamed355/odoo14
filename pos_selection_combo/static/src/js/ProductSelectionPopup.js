@@ -6,6 +6,58 @@ odoo.define('point_of_sale.ProductSelectionPopup', function(require) {
     const Registries = require('point_of_sale.Registries');
     const { useListener } = require('web.custom_hooks');
 
+    var utils = require('web.utils');
+    var round_di = utils.round_decimals;
+    var round_pr = utils.round_precision;
+
+    class AddQtyPopup extends AbstractAwaitablePopup {
+
+  		constructor() {
+  			super(...arguments);
+  		}
+
+  		async apply_qty () {
+  			let self = this;
+  			let order = this.env.pos.get_order();
+  			if(order){
+  				// let orderlines = order.get_orderlines();
+  				let selectedOrder = self.env.pos.get('selectedOrder');
+  				// $('#apply_qty_code').click(function() {
+  				let entered_qty = $("#entered_qty").val();
+  				let partner_id;
+  				let coupon_applied = true;
+  				let used = false;
+  				if (order.get_client() != null){
+  					partner_id = order.get_client();
+  				}
+          self.trigger('close-popup');
+  				// let total_amount = selectedOrder.get_total_without_tax();
+  				// await self.rpc({
+  				// 	model: 'pos.gift.coupon',
+  				// 	method: 'search_coupon',
+  				// 	args: [1, entered_code],
+          //
+  				// }).then(function(output) {
+  				// 	if(output.length > 0)
+  				// 	{
+          //
+          //   }else { //Invalid Coupon Code
+  				// 		Gui.showPopup('ErrorPopup', {
+  				// 			'title': self.env._t('Invalid Code !!!'),
+  				// 			'body': self.env._t("Voucher Code Entered by you is Invalid. Enter Valid Code..."),
+  				// 		});
+  				// 	}
+  				// });
+  			}
+  		}
+  	};
+
+  	AddQtyPopup.template = 'AddQtyPopup';
+
+  	Registries.Component.add(AddQtyPopup);
+
+
+
     class ProductSelectionPopup extends AbstractAwaitablePopup {
         constructor() {
             super(...arguments);
@@ -55,6 +107,7 @@ odoo.define('point_of_sale.ProductSelectionPopup', function(require) {
             return total_price.toFixed(2);
         }
         async _clickProduct(event) {
+          var self = this;
             if (this.popup.isRemoved) {
                 this.popup.isRemoved = false;
                 return
@@ -87,7 +140,7 @@ odoo.define('point_of_sale.ProductSelectionPopup', function(require) {
                         total_items += product.qty;
                     });
                     if(item_products.length > 0 && total_items >= topping_data.no_of_items){
-                        alert("You can only select "+ topping_data.no_of_items + " item from "+ topping_data.category);
+                        alert("You can only select "+ topping_data.no_of_items + " item from "+ topping_data.description);
                         return
                     }
                 }
@@ -98,14 +151,18 @@ odoo.define('point_of_sale.ProductSelectionPopup', function(require) {
                     var exist_product = _.find(order_menu[i].products, function(p) { return p.product_id === product.id});
                     if(exist_product) {
                         exist_product['qty'] = exist_product.qty + 1;
-                        exist_product['price'] = exist_product.qty * product.get_price(this.pricelist,1);
+                        exist_product['price'] = exist_product.qty * exist_product['price_unit'];
+                        // exist_product['price'] = exist_product.qty * product.get_price(this.pricelist,1);
                         allow = false;
                     } else {
                         order_menu[i].products.push({
                                 'product_id': product.id,
                                 'product_name': product.display_name,
                                 'price': product.get_price(this.pricelist,1),
-                                'qty': 1
+                                'price_unit': product.get_price(this.pricelist,1),
+                                'qty': 1,
+                                'tax_id': product.taxes_id,
+
                             });
                     }
                     allow = false;
@@ -115,18 +172,31 @@ odoo.define('point_of_sale.ProductSelectionPopup', function(require) {
                 }
             }
             if(allow){
-                order_menu.push({
-                        'toppingId': topping_data.id,
-                        'categoryName': description,
-                        'include_price': this.props.include_price,
-                        'products': [{
-                            'product_id':product.id,
-                            'product_name': product.display_name,
-                            'price': product.get_price(this.pricelist, 1),
-                            'qty': 1
-                        }]
-                    });
+              // self.showPopup('AddQtyPopup', {});
+
+              // var order = this.env.pos.get_order().get_selected_orderline();
+              // var tax = order.get_taxes_with_id(product.taxes_id);
+              // var item_price = order.compute_tax_fixed_price(tax,product.get_price(this.pricelist,1));
+              // var computed_price = order.compute_all_compo(tax,item_price,1,this.env.pos.currency.rounding);
+
+              order_menu.push({
+                      'toppingId': topping_data.id,
+                      'categoryName': description,
+                      'include_price': this.props.include_price,
+                      'products': [{
+                          'product_id':product.id,
+                          'product_name': product.display_name,
+                          'price': product.get_price(this.pricelist, 1),
+                          'price_unit': product.get_price(this.pricelist, 1),
+                          'qty': 1,
+                          'tax_id': product.taxes_id,
+                          // 'price_unit':item_price,
+                          // 'price_subtotal': computed_price.total_excluded,
+                          // 'price_subtotal_incl': computed_price.total_included
+                      }]
+                  });
             }
+
             this.env.order_menu = order_menu;
             this.render();
         }
@@ -135,13 +205,17 @@ odoo.define('point_of_sale.ProductSelectionPopup', function(require) {
 
             const topping_data = this.env.pos.topping_item_by_id[this.SelectionSelectedToppingId];
             const product = event.detail.product;
-
             _.each(this.env.order_menu, function(order_menu){
                 if(topping_data.id == order_menu.toppingId){
                     order_menu['products'] = _.reject(order_menu.products, function(p){ return p.product_id === product.id });
                 }
             });
-            this.env.order_menu = _.reject(this.env.order_menu, function(order_menu){ return order_menu.products < 1});
+
+            var order_menu = _.reject(this.env.order_menu, function(order_menu){ return order_menu.products < 1});
+            this.env.order_menu = order_menu;
+            this.render();
+
+
         }
         get currentOrder() {
             return this.env.pos.get_order();
@@ -149,6 +223,175 @@ odoo.define('point_of_sale.ProductSelectionPopup', function(require) {
         update_order_line(product, total_price) {
             this.currentOrder.add_product(product, {'price': product.get_price(this.pricelist, 1) + total_price});
             this.currentOrder.selected_orderline.price_manually_set = true;
+        }
+        get_taxes_with_id(taxes_ids){
+            // var taxes_ids = this.get_product().taxes_id;
+            var taxes = [];
+            if (taxes_ids) {
+              for (var i = 0; i < taxes_ids.length; i++) {
+                  if (this.env.pos.taxes_by_id[taxes_ids[i]]) {
+                      taxes.push(this.env.pos.taxes_by_id[taxes_ids[i]]);
+                  }
+              }
+            }
+
+            return taxes;
+        }
+        _compute_all(tax, base_amount, quantity, price_exclude) {
+            if(price_exclude === undefined)
+                var price_include = tax.price_include;
+            else
+                var price_include = !price_exclude;
+            if (tax.amount_type === 'fixed') {
+                var sign_base_amount = Math.sign(base_amount) || 1;
+                // Since base amount has been computed with quantity
+                // we take the abs of quantity
+                // Same logic as bb72dea98de4dae8f59e397f232a0636411d37ce
+                return tax.amount * sign_base_amount * Math.abs(quantity);
+            }
+            if (tax.amount_type === 'percent' && !price_include){
+                return base_amount * tax.amount / 100;
+            }
+            if (tax.amount_type === 'percent' && price_include){
+                return base_amount - (base_amount / (1 + tax.amount / 100));
+            }
+            if (tax.amount_type === 'division' && !price_include) {
+                return base_amount / (1 - tax.amount / 100) - base_amount;
+            }
+            if (tax.amount_type === 'division' && price_include) {
+                return base_amount - (base_amount * (tax.amount / 100));
+            }
+            return false;
+        }
+        compute_all_compo(taxes, price_unit, quantity, currency_rounding, handle_price_include=true) {
+            var self = this;
+
+            // 1) Flatten the taxes.
+
+            var _collect_taxes = function(taxes, all_taxes){
+                taxes.sort(function (tax1, tax2) {
+                    return tax1.sequence - tax2.sequence;
+                });
+                _(taxes).each(function(tax){
+                    if(tax.amount_type === 'group')
+                        all_taxes = _collect_taxes(tax.children_tax_ids, all_taxes);
+                    else
+                        all_taxes.push(tax);
+                });
+                return all_taxes;
+            }
+            var collect_taxes = function(taxes){
+                return _collect_taxes(taxes, []);
+            }
+
+            taxes = collect_taxes(taxes);
+
+            // 2) Deal with the rounding methods
+
+            var round_tax = this.env.pos.company.tax_calculation_rounding_method != 'round_globally';
+
+            var initial_currency_rounding = currency_rounding;
+            if(!round_tax)
+                currency_rounding = currency_rounding * 0.00001;
+
+            // 3) Iterate the taxes in the reversed sequence order to retrieve the initial base of the computation.
+            var recompute_base = function(base_amount, fixed_amount, percent_amount, division_amount){
+                 return (base_amount - fixed_amount) / (1.0 + percent_amount / 100.0) * (100 - division_amount) / 100;
+            }
+
+            var base = round_pr(price_unit * quantity, initial_currency_rounding);
+
+            var sign = 1;
+            if(base < 0){
+                base = -base;
+                sign = -1;
+            }
+
+            var total_included_checkpoints = {};
+            var i = taxes.length - 1;
+            var store_included_tax_total = true;
+
+            var incl_fixed_amount = 0.0;
+            var incl_percent_amount = 0.0;
+            var incl_division_amount = 0.0;
+
+            var cached_tax_amounts = {};
+            if (handle_price_include){
+                _(taxes.reverse()).each(function(tax){
+                    if(tax.include_base_amount){
+                        base = recompute_base(base, incl_fixed_amount, incl_percent_amount, incl_division_amount);
+                        incl_fixed_amount = 0.0;
+                        incl_percent_amount = 0.0;
+                        incl_division_amount = 0.0;
+                        store_included_tax_total = true;
+                    }
+                    if(tax.price_include){
+                        if(tax.amount_type === 'percent')
+                            incl_percent_amount += tax.amount;
+                        else if(tax.amount_type === 'division')
+                            incl_division_amount += tax.amount;
+                        else if(tax.amount_type === 'fixed')
+                            incl_fixed_amount += Math.abs(quantity) * tax.amount
+                        else{
+                            var tax_amount = self._compute_all(tax, base, quantity);
+                            incl_fixed_amount += tax_amount;
+                            cached_tax_amounts[i] = tax_amount;
+                        }
+                        if(store_included_tax_total){
+                            total_included_checkpoints[i] = base;
+                            store_included_tax_total = false;
+                        }
+                    }
+                    i -= 1;
+                });
+            }
+
+            var total_excluded = round_pr(recompute_base(base, incl_fixed_amount, incl_percent_amount, incl_division_amount), initial_currency_rounding);
+            var total_included = total_excluded;
+
+            // 4) Iterate the taxes in the sequence order to fill missing base/amount values.
+
+            base = total_excluded;
+
+            var skip_checkpoint = false;
+
+            var taxes_vals = [];
+            i = 0;
+            var cumulated_tax_included_amount = 0;
+            _(taxes.reverse()).each(function(tax){
+                if(!skip_checkpoint && tax.price_include && total_included_checkpoints[i] !== undefined){
+                    var tax_amount = total_included_checkpoints[i] - (base + cumulated_tax_included_amount);
+                    cumulated_tax_included_amount = 0;
+                }else
+                    var tax_amount = self._compute_all(tax, base, quantity, true);
+
+                tax_amount = round_pr(tax_amount, currency_rounding);
+
+                if(tax.price_include && total_included_checkpoints[i] === undefined)
+                    cumulated_tax_included_amount += tax_amount;
+
+                taxes_vals.push({
+                    'id': tax.id,
+                    'name': tax.name,
+                    'amount': sign * tax_amount,
+                    'base': sign * round_pr(base, currency_rounding),
+                });
+
+                if(tax.include_base_amount){
+                    base += tax_amount;
+                    if(!tax.price_include)
+                        skip_checkpoint = true;
+                }
+
+                total_included += tax_amount;
+                i += 1;
+            });
+
+            return {
+                'taxes': taxes_vals,
+                'total_excluded': sign * round_pr(total_excluded, this.env.pos.currency.rounding),
+                'total_included': sign * round_pr(total_included, this.env.pos.currency.rounding),
+            }
         }
         async confirm() {
             const topping_data = this.env.pos.topping_item_by_id[this.SelectionSelectedToppingId];
@@ -199,15 +442,28 @@ odoo.define('point_of_sale.ProductSelectionPopup', function(require) {
                     alert("You Must Have to Select " + topping_data.no_of_min_items + " item from " + topping_data.category);
                     return
                 }
+
                 for(var j=0; j < this.env.order_menu[i].products.length; j++) {
                     var product_id = this.env.order_menu[i].products[j].product_id;
+
+                    var prod = this.env.pos.db.get_product_by_id(parseInt(product_id));
+
+                    var tax = this.get_taxes_with_id(prod.taxes_id)
+
+                    var computed_price = this.compute_all_compo(tax,this.env.order_menu[i].products[j].price_unit,this.env.order_menu[i].products[j].qty,this.env.pos.currency.rounding)
                     own_data.push({
                         "product_id": this.env.pos.db.get_product_by_id(parseInt(product_id)),
                         'qty': this.env.order_menu[i].products[j].qty,
-                        'price': this.env.order_menu[i].products[j].price
+                        'price': this.env.order_menu[i].products[j].price,
+                        'tax_id': prod.taxes_id,
+                        'price_unit':this.env.order_menu[i].products[j].price_unit,
+                        'price_subtotal': computed_price.total_excluded,
+                        'price_subtotal_incl': computed_price.total_included
                     });
+                    // var pp = this.currentOrder.
                     if (this.env.order_menu[i].include_price) {
-                        total_price += this.env.order_menu[i].products[j].price;
+                      total_price += computed_price.total_included;
+                        // total_price += this.env.order_menu[i].products[j].price;
                     }
                 }
             }
@@ -223,6 +479,7 @@ odoo.define('point_of_sale.ProductSelectionPopup', function(require) {
         _switchCategory(event) {
             this.env.pos.set('SelectionSelectedToppingId', event.detail);
         }
+
     }
 
     ProductSelectionPopup.template = 'ProductSelectionPopup';

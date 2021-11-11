@@ -46,4 +46,28 @@
         </div>
     </t>
 
+    <t t-name="AddQtyPopup" owl="1">
+      <div role="dialog" class="modal-dialog">
+        <Draggable>
+          <div class="popup popup-textinput">
+            <header class="title drag-handle">
+              Quantity
+            </header>
+            <main class="body traceback" style="font-family: 'Lato-Reg';text-align: center;">
+              <p style="color: #875a7b;font-size: 1.5rem;">Enter Quantity</p>
+              <input id ="entered_qty" type="text" class="input-field" name="code"></input>
+            </main>
+            <footer class="footer">
+              <div class="button confirm odoo-theme-button" t-on-click="apply_qty">
+                Apply
+              </div>
+              <div class="button cancel odoo-theme-button" t-on-click="cancel">
+                Close
+              </div>
+            </footer>
+          </div>
+        </Draggable>
+      </div>
+    </t>
+
 </templates>
