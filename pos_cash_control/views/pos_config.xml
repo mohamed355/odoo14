@@ -19,6 +19,17 @@
                             Show Cash Control Feature in POS
                         </div>
                     </div>
+                    <t attrs="{'invisible' : [('enable_pos_cash_control', '=', False)]}">
+                      <div class="o_setting_left_pane" >
+                          <field name="close_balance_at_end_session"/>
+                      </div>
+                      <div class="o_setting_right_pane">
+                          <label for="close_balance_at_end_session" />
+                          <div class="text-muted">
+                              Requied to Enter Close Balance At the end of Session
+                          </div>
+                      </div>
+                    </t>
                 </div>
             </xpath>
         </field>
