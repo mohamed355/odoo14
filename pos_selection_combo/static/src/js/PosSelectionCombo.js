@@ -352,6 +352,8 @@ odoo.define('pos_selection_combo.PosSelectionCombo', function (require) {
             var json = _super_order_line.export_for_printing.call(this,arguments);
             json['order_menu'] = this.order_menu;
             json['is_selection_combo_product'] = this.get_product().is_selection_combo;
+            json['name_arabic'] = this.get_product().name_arabic;
+            console.log(json);
             return json;
         },
     });

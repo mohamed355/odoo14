@@ -157,6 +157,7 @@ odoo.define('point_of_sale.ProductSelectionPopup', function(require) {
                     } else {
                         order_menu[i].products.push({
                                 'product_id': product.id,
+                                'name_arabic': product.name_arabic,
                                 'product_name': product.display_name,
                                 'price': product.get_price(this.pricelist,1),
                                 'price_unit': product.get_price(this.pricelist,1),
@@ -185,6 +186,7 @@ odoo.define('point_of_sale.ProductSelectionPopup', function(require) {
                       'include_price': this.props.include_price,
                       'products': [{
                           'product_id':product.id,
+                          'name_arabic': product.name_arabic,
                           'product_name': product.display_name,
                           'price': product.get_price(this.pricelist, 1),
                           'price_unit': product.get_price(this.pricelist, 1),

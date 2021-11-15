@@ -12,6 +12,65 @@ odoo.define('pos_cash_control.pos_cash_control', function (require) {
     const Registries = require('point_of_sale.Registries');
     const { useListener } = require('web.custom_hooks');
 
+    const HeaderButton = require('point_of_sale.HeaderButton');
+    const LoginScreen = require('pos_hr.LoginScreen');
+
+
+    const ClosingBalance = (HeaderButton) =>
+        class extends HeaderButton {
+          constructor() {
+            super(...arguments);
+          }
+          async onClick() {
+            // console.log("SJDIOAJDOIWJY*&&*&*&^*TY^&%^",this);
+            // console.log(this.env.pos.config.close_balance_at_end_session);
+            if(this.env.pos.config.enable_pos_cash_control && this.env.pos.config.close_balance_at_end_session){
+              const x = await this._SetClosingBalance();
+            }else {
+              super.onClick();
+            }
+
+          }
+          async _SetClosingBalance(){
+              this.showPopup('SetClosingBalancePopupWidget', {
+                  'title': this.env._t('Set Closing Balance'),
+              });
+          }
+
+        };
+    const ClosingSessionLogin = (LoginScreen) =>
+        class extends LoginScreen {
+          constructor() {
+            super(...arguments);
+          }
+          async closeSession() {
+            console.log(this);
+            if(this.env.pos.config.enable_pos_cash_control && this.env.pos.config.close_balance_at_end_session){
+              const x = await this._SetClosingBalance();
+            }else {
+              super.closeSession();
+            }
+
+          }
+          async _SetClosingBalance(){
+              this.showPopup('SetClosingBalancePopupWidget', {
+                  'title': this.env._t('Set Closing Balance'),
+              });
+          }
+
+        };
+    // class ClosingBalance extends HeaderButton {
+    //
+    //
+    // }
+    // ClosingBalance.template = 'ClosingBalance';
+
+    // Registries.Component.add(ClosingBalance);
+    Registries.Component.extend(HeaderButton, ClosingBalance);
+    Registries.Component.extend(LoginScreen, ClosingSessionLogin);
+
+
+
     class CashControlButton extends PosComponent {
         constructor() {
             super(...arguments);
@@ -68,7 +127,7 @@ odoo.define('pos_cash_control.pos_cash_control', function (require) {
                     title: self.env._t('Unable to Show Payments'),
                     body: self.env._t('Unable to show Payments, due to some error. Please check internet connection.'),
                 });
-            });     
+            });
         }
     }
     CashControlPopupWidget.template = 'CashControlPopupWidget';
@@ -89,7 +148,7 @@ odoo.define('pos_cash_control.pos_cash_control', function (require) {
                 $('#amount').addClass("text_shake");
                 return
             }
-            
+
             var reason = $('#reason').val()
             var amount = $('#amount').val()
             var user_id = false
@@ -155,7 +214,7 @@ odoo.define('pos_cash_control.pos_cash_control', function (require) {
                 $('#amount_cash_out').addClass("text_shake");
                 return
             }
-            
+
             var reason = $('#reason_cash_out').val()
             var amount = $('#amount_cash_out').val()
             var user_id = false
@@ -218,30 +277,34 @@ odoo.define('pos_cash_control.pos_cash_control', function (require) {
                 'pos_session_id' : self.env.pos.pos_session.id,
                 'cash_box_data': cash_box_data,
             }
-            rpc.query({
-                model: 'pos.session',
-                method: 'create_closing_cash_control',
-                args: [cash_control_details],
-            }).then(function (result) {
-                if (result){
-                    self.showPopup('TransactionPopup', {
-                        title: self.env._t('Success'),
-                        body: self.env._t("Successfully Created Closing Balance")
-                    });
-                }
-                else{
-                    self.showPopup('ErrorPopup', {
-                        title: self.env._t('Unable to Set Closing Balance'),
-                        body: self.env._t("Unable to Set Closing Balace, due to some error. Please check internet connection.")
-                    });
-                }
-            }).catch(function (error) {
-                console.log("---fail---",error)
-                self.showPopup('ErrorPopup', {
-                    title: self.env._t('Unable to Set Closing Balance'),
-                    body: self.env._t("Unable to Set Closing Balace, due to some error. Please check internet connection.")
-                });
-            });
+
+            if (Object.keys(cash_box_data).length>0) {
+              rpc.query({
+                  model: 'pos.session',
+                  method: 'create_closing_cash_control',
+                  args: [cash_control_details],
+              }).then(function (result) {
+                  if (result){
+                      self.showPopup('TransactionPopup', {
+                          title: self.env._t('Success'),
+                          body: self.env._t("Successfully Created Closing Balance")
+                      });
+                      self.trigger('close-pos');
+                  }
+                  else{
+                      self.showPopup('ErrorPopup', {
+                          title: self.env._t('Unable to Set Closing Balance'),
+                          body: self.env._t("Unable to Set Closing Balace, due to some error. Please check internet connection.")
+                      });
+                  }
+              }).catch(function (error) {
+                  console.log("---fail---",error)
+                  self.showPopup('ErrorPopup', {
+                      title: self.env._t('Unable to Set Closing Balance'),
+                      body: self.env._t("Unable to Set Closing Balace, due to some error. Please check internet connection.")
+                  });
+              });
+          }
         }
         get_cash_box_data(){
             var records = {}
@@ -264,7 +327,7 @@ odoo.define('pos_cash_control.pos_cash_control', function (require) {
             var line_count = this.line_count
             var newRow=document.getElementById('closing-balance').insertRow();
             newRow.innerHTML=`
-             <tr class="bill-line" line_id="`+ line_count +`" style="border-bottom: 1px solid;">		
+             <tr class="bill-line" line_id="`+ line_count +`" style="border-bottom: 1px solid;">
                  <td style="padding: 1%;">
                      <input class="bill_count" type="number" value="0" bill_count_line_id="`+ line_count +`" type='text'/>
                  </td>
@@ -289,7 +352,7 @@ odoo.define('pos_cash_control.pos_cash_control', function (require) {
             var bill_value = $("[bill_value_line_id="+ line_id + "]").val()
             var amount = bill_count*bill_value
             $("[bill_total_line_id="+ line_id + "]").html(amount)
-            
+
             var total_amount = 0
             $('.bill_total').each(function(i, obj) {
                 total_amount = total_amount + parseFloat(obj.innerHTML)
@@ -335,7 +398,7 @@ odoo.define('pos_cash_control.pos_cash_control', function (require) {
     }
     PaymentsPopupWidget.template = 'PaymentsPopupWidget';
     Registries.Component.add(PaymentsPopupWidget);
-    
+
     class TransactionPopup extends AbstractAwaitablePopup {}
     TransactionPopup.template = 'TransactionPopup';
     Registries.Component.add(TransactionPopup);

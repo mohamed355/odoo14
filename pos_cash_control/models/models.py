@@ -4,7 +4,7 @@
 #   Copyright (c) 2016-Present Webkul Software Pvt. Ltd. (<https://webkul.com/>)
 #   See LICENSE file for full copyright and licensing details.
 #   License URL : <https://store.webkul.com/license.html/>
-# 
+#
 #################################################################################
 from odoo import api, fields, models, _
 from odoo.exceptions import UserError
@@ -15,6 +15,7 @@ class PosConfig(models.Model):
     _inherit = 'pos.config'
 
     enable_pos_cash_control = fields.Boolean(string="Cash Control in POS", default=True)
+    close_balance_at_end_session = fields.Boolean(string="Requied to Enter Close Balance At the end of Session", default=True)
 
 class PosSession(models.Model):
     _inherit = 'pos.session'
@@ -26,9 +27,9 @@ class PosSession(models.Model):
             pos_session_id = self.search([('id', '=', kwargs.get('pos_session_id'))])
             if pos_session_id:
                 results['cash_register_balance_start'] = pos_session_id.cash_register_balance_start
-                results['cash_register_total_entry_encoding'] = pos_session_id.cash_register_total_entry_encoding 
+                results['cash_register_total_entry_encoding'] = pos_session_id.cash_register_total_entry_encoding
                 results['cash_register_balance_end'] = pos_session_id.cash_register_balance_end
-                results['cash_register_balance_end_real'] = pos_session_id.cash_register_balance_end_real     
+                results['cash_register_balance_end_real'] = pos_session_id.cash_register_balance_end_real
             payments = self.env['pos.payment'].search([('session_id', '=', kwargs.get('pos_session_id'))])
             if payments and len(payments):
                 values = []
@@ -70,7 +71,7 @@ class PosSession(models.Model):
                             'unable_to_create': True,
                             'message' : "Please check that the field 'Transfer Account' is set on the company."
                         }
-           
+
                 if record.state == 'confirm':
                     return {
                         'unable_to_create': True,
@@ -109,7 +110,7 @@ class PosSession(models.Model):
                 if len(cash_box_id.cashbox_lines_ids):
                     for cashbox_lines_id in cash_box_id.cashbox_lines_ids:
                         cashbox_lines_id.unlink()
-                        
+
                 cash_box_line_id = []
                 for value in kwargs.get('cash_box_data'):
                     cash_box_line = {}
@@ -118,10 +119,10 @@ class PosSession(models.Model):
                     cash_box_line['cashbox_id'] = cash_box_id.id
                     cashbox_line_id = self.env['account.cashbox.line'].create(cash_box_line)
                     cash_box_line_id.append(cashbox_line_id.id)
-                
-                cash_box_id.cashbox_lines_ids = [cash_box_line_id] 
+
+                cash_box_id.cashbox_lines_ids = [cash_box_line_id]
                 return True
-            else: 
+            else:
                 cash_box_obj = self.env['account.bank.statement.cashbox']
                 vals = {}
                 vals['cashbox_lines_ids'] = [[0, 0, {'coin_value': kwargs.get('cash_box_data')[value], 'number': int(value)}] for value in kwargs.get('cash_box_data')]
@@ -131,15 +132,15 @@ class PosSession(models.Model):
                     self.create_closing_entry(kwargs, session_id)
                 return True
         else:
-            return False  
-    
+            return False
+
     def create_closing_entry(self, kwargs, session_id):
         cash_box_id = session_id.cash_register_id.cashbox_end_id
         if cash_box_id:
             if len(cash_box_id.cashbox_lines_ids):
                 for cashbox_lines_id in cash_box_id.cashbox_lines_ids:
                     cashbox_lines_id.unlink()
-                    
+
             cash_box_line_id = []
             for value in kwargs.get('cash_box_data'):
                 cash_box_line = {}
@@ -148,8 +149,8 @@ class PosSession(models.Model):
                 cash_box_line['cashbox_id'] = cash_box_id.id
                 cashbox_line_id = self.env['account.cashbox.line'].create(cash_box_line)
                 cash_box_line_id.append(cashbox_line_id.id)
-            
-            cash_box_id.cashbox_lines_ids = [cash_box_line_id] 
+
+            cash_box_id.cashbox_lines_ids = [cash_box_line_id]
             return True
 
 class PosCashIn(models.Model):
