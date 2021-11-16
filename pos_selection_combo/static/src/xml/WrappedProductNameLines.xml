@@ -24,10 +24,8 @@
       <xpath expr="//div[hasclass('pos-receipt')]" position="replace">
         <div class="pos-receipt">
           <div class="pos-receipt-contact">
-
                 <br/>
                 <br/>
-
                 <t t-if="env.pos.company.name_arabic">
                     <div style="font-size:18pt;font-weight:bold">
                         <span t-esc="env.pos.name_arabic" style="text-size:12pt"/>
@@ -125,11 +123,11 @@
                             <t t-foreach="order_menu.products" t-as="product" t-key="product.id">
                                 <tr style="margin-top:5pt">
 
-                                  <td style="padding-bottom:3pt;padding-top:2pt;vertical-align:top; font-weight:bold;" class="pos-right-align">
+                                  <td style="vertical-align:top; font-weight:bold;font-size: 8pt;" class="pos-right-align">
                                       <t t-esc="orderline.quantity * product.qty"/>
                                   </td>
 
-                                  <td style="text-align:right;padding-bottom:3pt;padding-top:2pt;vertical-align:top; font-weight:bold;">
+                                  <td style="vertical-align:top; font-weight:bold;font-size: 8pt;">
                                     <t t-esc="product.product_name"/>
                                     <t t-if="product.name_arabic">
                                         <br/>
@@ -139,6 +137,7 @@
                                 </tr>
                             </t>
                         </t>
+
                       </t>
                   </t>
                 </table>
@@ -146,7 +145,7 @@
         </div>
       </xpath>
     </t>
-    <t t-name="OrderReceipt" t-inherit="point_of_sale.OrderReceipt" t-inherit-mode="extension" owl="1">
+    <!-- <t t-name="OrderReceipt" t-inherit="point_of_sale.OrderReceipt" t-inherit-mode="extension" owl="1">
       <xpath expr="//div[hasclass('orderlines')]" position="replace">
           <div class="orderlines">
               <table style="border-bottom:1pt dashed black;margin-top:-20pt;padding:5pt;font-size:9pt; font-weight:bold;">
@@ -251,7 +250,6 @@
                         </td>
 
                         <td style="padding-bottom:3pt;padding-top:2pt;vertical-align:top; font-weight:bold;" class="pos-right-align">
-                            <!-- <t t-esc="env.pos.format_currency(orderline.get_lst_price())"/> -->
                             <t t-esc="env.pos.format_currency(orderline.price)"/>
 
                         </td>
@@ -275,7 +273,7 @@
                     <t t-if="orderline.is_selection_combo_product and orderline.order_menu">
                       <div>Combo</div>
                       <t t-foreach="orderline.order_menu" t-as="order_menu" t-key="order_menu.id">
-                          <!-- <div><t t-esc="order_menu.categoryName"/></div> -->
+                          <div><t t-esc="order_menu.categoryName"/></div>
                           <t t-foreach="order_menu.products" t-as="product" t-key="product.id">
                               <tr style="margin-top:5pt">
                                 <td style="padding-bottom:3pt;padding-top:2pt;vertical-align:top; font-weight:bold;">
@@ -376,7 +374,7 @@
               </table>
           </div>
       </xpath>
-    </t>
+    </t> -->
 
 
 </templates>
