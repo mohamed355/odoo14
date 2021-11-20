@@ -10,51 +10,51 @@ odoo.define('point_of_sale.ProductSelectionPopup', function(require) {
     var round_di = utils.round_decimals;
     var round_pr = utils.round_precision;
 
-    class AddQtyPopup extends AbstractAwaitablePopup {
-
-  		constructor() {
-  			super(...arguments);
-  		}
-
-  		async apply_qty () {
-  			let self = this;
-  			let order = this.env.pos.get_order();
-  			if(order){
-  				// let orderlines = order.get_orderlines();
-  				let selectedOrder = self.env.pos.get('selectedOrder');
-  				// $('#apply_qty_code').click(function() {
-  				let entered_qty = $("#entered_qty").val();
-  				let partner_id;
-  				let coupon_applied = true;
-  				let used = false;
-  				if (order.get_client() != null){
-  					partner_id = order.get_client();
-  				}
-          self.trigger('close-popup');
-  				// let total_amount = selectedOrder.get_total_without_tax();
-  				// await self.rpc({
-  				// 	model: 'pos.gift.coupon',
-  				// 	method: 'search_coupon',
-  				// 	args: [1, entered_code],
-          //
-  				// }).then(function(output) {
-  				// 	if(output.length > 0)
-  				// 	{
-          //
-          //   }else { //Invalid Coupon Code
-  				// 		Gui.showPopup('ErrorPopup', {
-  				// 			'title': self.env._t('Invalid Code !!!'),
-  				// 			'body': self.env._t("Voucher Code Entered by you is Invalid. Enter Valid Code..."),
-  				// 		});
-  				// 	}
-  				// });
-  			}
-  		}
-  	};
-
-  	AddQtyPopup.template = 'AddQtyPopup';
-
-  	Registries.Component.add(AddQtyPopup);
+    // class AddQtyPopup extends AbstractAwaitablePopup {
+    //
+  	// 	constructor() {
+  	// 		super(...arguments);
+  	// 	}
+    //
+  	// 	async apply_qty () {
+  	// 		let self = this;
+  	// 		let order = this.env.pos.get_order();
+  	// 		if(order){
+  	// 			// let orderlines = order.get_orderlines();
+  	// 			let selectedOrder = self.env.pos.get('selectedOrder');
+  	// 			// $('#apply_qty_code').click(function() {
+  	// 			let entered_qty = $("#entered_qty").val();
+  	// 			let partner_id;
+  	// 			let coupon_applied = true;
+  	// 			let used = false;
+  	// 			if (order.get_client() != null){
+  	// 				partner_id = order.get_client();
+  	// 			}
+    //       self.trigger('close-popup');
+  	// 			// let total_amount = selectedOrder.get_total_without_tax();
+  	// 			// await self.rpc({
+  	// 			// 	model: 'pos.gift.coupon',
+  	// 			// 	method: 'search_coupon',
+  	// 			// 	args: [1, entered_code],
+    //       //
+  	// 			// }).then(function(output) {
+  	// 			// 	if(output.length > 0)
+  	// 			// 	{
+    //       //
+    //       //   }else { //Invalid Coupon Code
+  	// 			// 		Gui.showPopup('ErrorPopup', {
+  	// 			// 			'title': self.env._t('Invalid Code !!!'),
+  	// 			// 			'body': self.env._t("Voucher Code Entered by you is Invalid. Enter Valid Code..."),
+  	// 			// 		});
+  	// 			// 	}
+  	// 			// });
+  	// 		}
+  	// 	}
+  	// };
+    //
+  	// AddQtyPopup.template = 'AddQtyPopup';
+    //
+  	// Registries.Component.add(AddQtyPopup);
 
 
 
@@ -223,8 +223,12 @@ odoo.define('point_of_sale.ProductSelectionPopup', function(require) {
             return this.env.pos.get_order();
         }
         update_order_line(product, total_price) {
-            this.currentOrder.add_product(product, {'price': product.get_price(this.pricelist, 1) + total_price});
-            this.currentOrder.selected_orderline.price_manually_set = true;
+            this.currentOrder.add_product(product, {
+                price: product.get_price(this.pricelist, 1) + total_price,
+                // extras: {price_manually_set: true}
+              }
+            );
+            // this.currentOrder.selected_orderline.price_manually_set = true;
         }
         get_taxes_with_id(taxes_ids){
             // var taxes_ids = this.get_product().taxes_id;

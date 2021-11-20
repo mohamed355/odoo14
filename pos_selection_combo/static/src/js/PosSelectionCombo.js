@@ -358,5 +358,64 @@ odoo.define('pos_selection_combo.PosSelectionCombo', function (require) {
         },
     });
 
+    var _super_order = Models.Order.prototype;
+    Models.Order = Models.Order.extend({
+
+      get_taxes_with_id: function(taxes_ids){
+          // var taxes_ids = this.get_product().taxes_id;
+          var taxes = [];
+          if (taxes_ids) {
+            for (var i = 0; i < taxes_ids.length; i++) {
+                if (this.pos.taxes_by_id[taxes_ids[i]]) {
+                    taxes.push(this.pos.taxes_by_id[taxes_ids[i]]);
+                }
+            }
+          }
+
+          return taxes;
+      },
+      set_pricelist: function (pricelist) {
+          var self = this;
+          this.pricelist = pricelist;
+
+          var lines_to_recompute = _.filter(this.get_orderlines(), function (line) {
+              return ! line.price_manually_set;
+          });
+
+          _.each(lines_to_recompute, function (line) {
+            if (line.product.is_selection_combo && line.own_data) {
+              if (line.own_data.length) {
+                // console.log(line.product.get_price(self.pricelist, line.get_quantity(), line.get_price_extra()),self.pricelist);
+                var tax = self.get_taxes_with_id(line.product.taxes_id)
+                var price_unit = line.product.get_price(self.pricelist, line.get_quantity(), line.get_price_extra());
+                var total = price_unit;
+                _.each(line.own_data, function(item) {
+                  price_unit = item.product_id.get_price(self.pricelist, 1);
+                  tax = self.get_taxes_with_id(item.product_id.taxes_id)
+                  var computed_price = line.compute_all(tax,price_unit,item.qty,self.pos.currency.rounding)
+                  item.price_unit=item.product_id.get_price(self.pricelist, 1);
+                  item.price=item.qty*item.price_unit;
+                  if (line.order_menu[0].include_price) {
+                    total += computed_price.total_included;
+                  }
+                });
+                line.set_unit_price(total);
+                self.fix_tax_included_price(line);
+              }else {
+                line.set_unit_price(line.product.get_price(self.pricelist, line.get_quantity(), line.get_price_extra()));
+                self.fix_tax_included_price(line);
+              }
+
+
+            }else {
+              line.set_unit_price(line.product.get_price(self.pricelist, line.get_quantity(), line.get_price_extra()));
+              self.fix_tax_included_price(line);
+            }
+
+          });
+          this.trigger('change');
+      },
+    });
+
     return SelectionComboProductScreen;
 });

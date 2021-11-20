@@ -20,7 +20,7 @@
         </xpath>
     </t>
 
-    <t t-name="KitchenReceipt" t-inherit="mai_pos_kitchen_screen_arabic.KitchenReceipt" t-inherit-mode="extension" owl="1">
+    <!-- <t t-name="KitchenReceipt" t-inherit="mai_pos_kitchen_screen_arabic.KitchenReceipt" t-inherit-mode="extension" owl="1">
       <xpath expr="//div[hasclass('pos-receipt')]" position="replace">
         <div class="pos-receipt">
           <div class="pos-receipt-contact">
@@ -119,7 +119,6 @@
                       <t t-if="orderline.is_selection_combo_product and orderline.order_menu">
                         <div>Combo</div>
                         <t t-foreach="orderline.order_menu" t-as="order_menu" t-key="order_menu.id">
-                            <!-- <div><t t-esc="order_menu.categoryName"/></div> -->
                             <t t-foreach="order_menu.products" t-as="product" t-key="product.id">
                                 <tr style="margin-top:5pt">
 
@@ -144,7 +143,7 @@
             </div>
         </div>
       </xpath>
-    </t>
+    </t> -->
     <!-- <t t-name="OrderReceipt" t-inherit="point_of_sale.OrderReceipt" t-inherit-mode="extension" owl="1">
       <xpath expr="//div[hasclass('orderlines')]" position="replace">
           <div class="orderlines">
