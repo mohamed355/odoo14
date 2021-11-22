@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+
+		<record model="ir.ui.view" id="view_inherit_hide_button_pos_config_pay">
+			<field name="name">inherit.hide.button.pos.config</field>
+			<field name="model">pos.config</field>
+			<field name="inherit_id" ref="point_of_sale.pos_config_view_form"/>
+			<field name="arch" type="xml">
+				<data>
+					<xpath expr="//div[@id='receipt']" position="after">
+						<h2 name="hide_buttons">Hide Buttons</h2>
+            <div class="row mt16 o_settings_container" id="client_button">
+                <div class="col-12 col-lg-6 o_setting_box">
+                    <div class="o_setting_left_pane">
+                        <field name="hide_client_button"/>
+                    </div>
+                    <div class="o_setting_right_pane">
+                        <label for="hide_client_button"/>
+                        <div class="text-muted">
+                            Hide Edit/Create In Client List.
+                        </div>
+                    </div>
+                </div>
+            </div>
+					</xpath>
+				</data>
+			</field>
+		</record>
+
+	</data>
+</odoo>

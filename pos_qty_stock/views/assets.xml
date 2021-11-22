@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<template id="assets_for_pos_qty_stock" inherit_id="point_of_sale.assets">
+			<xpath expr="." position="inside">
+				<link rel="stylesheet" href="/pos_qty_stock/static/src/css/pos.css" />
+				<link rel="stylesheet" href="/pos_qty_stock/static/src/css/custom.css" />
+				<!-- - - - - - - Misc- - - - - - - -->
+				<script type="text/javascript" src="/pos_qty_stock/static/src/js/Misc/models.js"/>
+				<script type="text/javascript" src="/pos_qty_stock/static/src/js/Misc/SyncStock.js"/>
+				<script type="text/javascript" src="/pos_qty_stock/static/src/js/Misc/Chrome.js"/>
+
+				<!-- - - - - - - - - -  Screens - - - - - - - - - - -->
+				<!-- - - - - Base - - - - -->
+				<script type="text/javascript" src="/pos_qty_stock/static/src/js/Screens/Base/ProductScreen.js"/>
+				<script type="text/javascript" src="/pos_qty_stock/static/src/js/Screens/Base/ProductsWidget.js"/>
+				<script type="text/javascript" src="/pos_qty_stock/static/src/js/Screens/Base/ReceiptScreen.js"/>
+
+
+			</xpath>
+		</template>
+	</data>
+</odoo>
