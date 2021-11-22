@@ -2,7 +2,7 @@
 #################################################################################
 #################################################################################
 {
-  "name"                 :  "POS All Orders Lists",
+  "name"                 :  "POS All Orders List",
   "summary"              :  """The module shows the list of orders placed in a Odoo POS screen. The user can also view previous orders from one customers in running POS session""",
   "category"             :  "Point of Sale",
   "version"              :  "1.0",

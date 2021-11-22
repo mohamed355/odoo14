@@ -21,12 +21,12 @@ odoo.define('pos_orders.pos_orders',function(require){
                 if(self.config.order_loading_options == 'n_days'){
                     var today = new Date();
                     var validation_date = new Date(today.setDate(today.getDate()-self.config.number_of_days)).toISOString();
-                    domain_list = [['date_order','>',validation_date],['state', 'not in', ['draft', 'cancel']]];
+                    domain_list = [['config_id', '=', self.config_id],['date_order','>',validation_date],['state', 'not in', ['draft', 'cancel']]];
                 }
                 else if(self.config.order_loading_options == 'current_session')
                     domain_list = [['session_id', '=', self.pos_session.name], ['state', 'not in', ['draft', 'cancel']]];
                 else
-                    domain_list = [['state', 'not in', ['draft', 'cancel']]];
+                    domain_list = [['config_id', '=', self.config_id],['state', 'not in', ['draft', 'cancel']]];
                 return domain_list;
             },
             loaded: function(self, wk_order) {
@@ -67,43 +67,48 @@ odoo.define('pos_orders.pos_orders',function(require){
         _save_to_server: function (orders, options) {
             var self = this;
             return SuperPosModel._save_to_server.call(this,orders,options).then(function(return_dict){
+
                 if(return_dict){
                     _.forEach(return_dict, function(data){
                         if(data.orders != null){
-                            data.orders.forEach(function(order){
-                                if(order.existing)
-                                {
-                                    self.db.pos_all_orders.forEach(function(order_from_list){
-                                        if(order_from_list.id == order.original_order_id)
-                                            order_from_list.return_status = order.return_status
-                                    });
-                                }
-                                else{
-                                    var order_date = new Date(order['date_order'])
-                                    var utc = order_date.getTime() - (order_date.getTimezoneOffset() * 60000);
-                                    order['date_order'] = new Date(utc).toLocaleString()
-                                    self.db.pos_all_orders.unshift(order);
-                                    self.db.order_by_id[order.id] = order;
-                                }
-                            });
+                          var payment_ids = [];
+                          if(self.db.all_payments)
+                              data.payments.forEach(function(payment) {
+                                payment_ids.push(payment.id)
+                                self.db.all_payments.unshift(payment);
+                                self.db.payment_by_id[payment.id] = payment;
+                          });
 
-                            data.orderlines.forEach(function(orderline){
-                                if(orderline.existing){
-                                    var target_line = self.db.line_by_id[orderline.id];
-                                    target_line.line_qty_returned = orderline.line_qty_returned;
-                                }
-                                else{
-                                    self.db.pos_all_order_lines.unshift(orderline);
-                                    self.db.line_by_id[orderline.id] = orderline;
-                                }
-                            });
-                        
-                            if(self.db.all_payments)
-                                data.payments.forEach(function(payment) {
-                                    self.db.all_payments.unshift(payment);
-                                    self.db.payment_by_id[payment.id] = payment;
-                            });
+                          data.orders.forEach(function(order){
+                              if(order.existing)
+                              {
+                                  self.db.pos_all_orders.forEach(function(order_from_list){
+                                      if(order_from_list.id == order.original_order_id)
+                                          order_from_list.return_status = order.return_status
+                                  });
+                              }
+                              else{
+                                order['payment_ids']=payment_ids;
+                                var order_date = new Date(order['date_order'])
+                                var utc = order_date.getTime() - (order_date.getTimezoneOffset() * 60000);
+                                order['date_order'] = new Date(utc).toLocaleString()
+                                self.db.pos_all_orders.unshift(order);
+                                self.db.order_by_id[order.id] = order;
 
+
+                              }
+                          });
+
+                          data.orderlines.forEach(function(orderline){
+                              if(orderline.existing){
+                                  var target_line = self.db.line_by_id[orderline.id];
+                                  target_line.line_qty_returned = orderline.line_qty_returned;
+                              }
+                              else{
+                                  self.db.pos_all_order_lines.unshift(orderline);
+                                  self.db.line_by_id[orderline.id] = orderline;
+                              }
+                          });
                             delete data.orders;
                             delete data.orderlines;
                             delete data.payments;
@@ -126,6 +131,7 @@ odoo.define('pos_orders.pos_orders',function(require){
             }
         }
 		render_list(order, input_txt){
+
             var self = this;
             var customer_id = this.get_customer();
             var new_order_data = [];
@@ -143,7 +149,7 @@ odoo.define('pos_orders.pos_orders',function(require){
                     if (order[i].partner_id == '') {
                         order[i].partner_id = [0, '-'];
                     }
-                    if (((order[i].name.toLowerCase()).indexOf(search_text) != -1) || ((order[i].partner_id[1].toLowerCase()).indexOf(search_text) != -1)) {
+                    if (((order[i].name.toLowerCase()).indexOf(search_text) != -1) || ((order[i].partner_id[1].toLowerCase()).indexOf(search_text) != -1)||((order[i].pos_reference.toLowerCase()).indexOf(search_text) != -1)) {
                         new_order_data = new_order_data.concat(order[i]);
                     }
                 }
@@ -203,7 +209,7 @@ odoo.define('pos_orders.pos_orders',function(require){
     AllOrdersButton.template = 'AllOrdersButton';
     ProductScreen.addControlButton({ component: AllOrdersButton, condition: function() { return true; },});
 	Registries.Component.add(AllOrdersButton);
-    
+
     // Inherit ClientLine-------------
     const PosResClientLine = (ClientLine) =>
         class extends ClientLine{

@@ -43,6 +43,7 @@ odoo.define('pos_order_return.pos_order_return', function(require) {
             var today = new Date();
             var validation_date = new Date(today.setDate(today.getDate() - self.config.number_of_days)).toISOString();
             domain_list = [
+                ['config_id', '=', self.config_id],
                 ['date_order', '>', validation_date],
                 ['state', 'not in', ['draft', 'cancel']],
                 ['is_return_order', '=', false]
@@ -55,6 +56,7 @@ odoo.define('pos_order_return.pos_order_return', function(require) {
             ];
         else
             domain_list = [
+                ['config_id', '=', self.config_id],
                 ['state', 'not in', ['draft', 'cancel']],
                 ['is_return_order', '=', false]
             ]
@@ -197,7 +199,7 @@ odoo.define('pos_order_return.pos_order_return', function(require) {
                         self.back();
                     }
 				},50);
-            }	
+            }
         }
 	Registries.Component.extend(ClientListScreen, PosResClientListScreen);
 
@@ -211,6 +213,8 @@ odoo.define('pos_order_return.pos_order_return', function(require) {
             async deleteOrder(order) {
                 const screen = order.get_screen_data();
                 if (['ProductScreen', 'PaymentScreen'].includes(screen.name) && order.get_orderlines().length > 0) {
+
+                  if (this.getTotal(order) > 0 && !order.is_return_order) {
                     const { confirmed } = await this.showPopup('ConfirmPopup', {
                         title: 'Existing orderlines',
                         body: `${order.name} has total amount of ${this.getTotal(
@@ -218,6 +222,7 @@ odoo.define('pos_order_return.pos_order_return', function(require) {
                         )}, are you sure you want delete this order?`,
                     });
                     if (!confirmed) return;
+                  }
                 }
                 if (order) {
                     order.destroy({ reason: 'abandon' });
@@ -246,7 +251,7 @@ odoo.define('pos_order_return.pos_order_return', function(require) {
                 } else {
                     $('.button.cancel_refund_order').hide();
                 }
-            }	
+            }
         }
 	Registries.Component.extend(PaymentScreen, PosResPaymentScreen);
 
@@ -264,7 +269,7 @@ odoo.define('pos_order_return.pos_order_return', function(require) {
             }
         },
     });
-  
+
     // Inherit ProductScreen-------------
     const PosResProductScreen = (ProductScreen) =>
         class extends ProductScreen{
@@ -275,13 +280,15 @@ odoo.define('pos_order_return.pos_order_return', function(require) {
             async deleteOrder(order) {
                 const screen = order.get_screen_data();
                 if (['ProductScreen', 'PaymentScreen'].includes(screen.name) && order.get_orderlines().length > 0) {
-                    const { confirmed } = await this.showPopup('ConfirmPopup', {
-                        title: 'Existing orderlines',
-                        body: `${order.name} has total amount of ${this.getTotal(
-                            order
-                        )}, are you sure you want delete this order?`,
-                    });
-                    if (!confirmed) return;
+                    if (this.getTotal(order) > 0 && !order.is_return_order) {
+                      const { confirmed } = await this.showPopup('ConfirmPopup', {
+                          title: 'Existing orderlines',
+                          body: `${order.name} has total amount of ${this.getTotal(
+                              order
+                          )}, are you sure you want delete this order?`,
+                      });
+                      if (!confirmed) return;
+                    }
                 }
                 if (order) {
                     order.destroy({ reason: 'abandon' });
@@ -324,7 +331,7 @@ odoo.define('pos_order_return.pos_order_return', function(require) {
                     $('.button.set-customer').removeClass('return_order_button');
                     $('#all_orders').removeClass('return_order_button');
                 }
-            }	
+            }
         }
 	Registries.Component.extend(ProductScreen, PosResProductScreen);
 
@@ -426,7 +433,7 @@ odoo.define('pos_order_return.pos_order_return', function(require) {
                 var order = self.env.pos.get_order();
                 if (!order.is_return_order || (order.is_exchange_order && order.selected_orderline && !order.selected_orderline.original_line_id))
                     super.sendInput(key)
-            }	
+            }
         }
 	Registries.Component.extend(NumpadWidget, PosResNumpadWidget);
 
@@ -543,7 +550,7 @@ odoo.define('pos_order_return.pos_order_return', function(require) {
                                 });
                             } else if (non_returnable_products) {
                                 self.confirm_popup(message, original_orderlines, order, true);
-                                
+
                             } else {
                                 self.showPopup('OrderReturnPopup', {
                                     'orderlines': original_orderlines,
@@ -599,13 +606,13 @@ odoo.define('pos_order_return.pos_order_return', function(require) {
                         }
                         // --------------End code for POS Order Reprint-----------------------
                     });
-                    
+
                     var contents = $('.order-details-contents');
                     contents.empty();
                     var parent = $('.wk_order_list').parent();
                     parent.scrollTop(0);
 				},150);
-            }	
+            }
         }
 	Registries.Component.extend(pos_orders, PosRespos_orders);
 });
