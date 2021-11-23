@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<!--Custom Sale Order View-->
+
+
+		<record model="ir.ui.view" id="view_inherit_pos_config_industry">
+			<field name="name">inherit.pos.config</field>
+			<field name="model">pos.config</field>
+			<field name="inherit_id" ref="point_of_sale.pos_config_view_form"/>
+			<field name="arch" type="xml">
+				<data>
+					<xpath expr="//div[@id='receipt']" position="after">
+						<h2>Industry</h2>
+						<div class="row mt16 o_settings_container" id="industry_id">
+							<div id="industry_view" class="col-12 col-lg-6 o_setting_box">
+								<div class="o_setting_right_pane">
+									<span class="o_form_label" >Industry</span>
+
+									<div class="content-group mt16">
+										<field name="industry_id" widget="many2many_tags"/>
+									</div>
+								</div>
+							</div>
+						</div>
+
+
+					</xpath>
+				</data>
+			</field>
+		</record>
+
+<!-- 
+	   <record model="ir.ui.view" id="po_res_partner">
+			<field name="name">po.res.partner</field>
+			<field name="model">res.partner</field>
+			<field name="inherit_id" ref="point_of_sale.view_partner_property_form"/>
+			<field name="arch" type="xml">
+				<field name="barcode" position="after">
+					<field name="industry_id"/>
+				</field>
+			</field>
+		</record> -->
+
+
+
+	</data>
+</odoo>
