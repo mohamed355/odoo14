@@ -54,7 +54,7 @@ class stock_quant(models.Model):
 
 class product(models.Model):
 	_inherit = 'product.product'
-	
+
 	available_quantity = fields.Float('Available Quantity')
 
 	def get_stock_location_avail_qty(self, location,products):
@@ -108,7 +108,7 @@ class product(models.Model):
 					product.available_quantity = quants.quantity - product_qty + incoming_qty
 					res.update({product.id : quants.quantity - product_qty + incoming_qty})
 		return [res]
-	
+
 
 class StockPicking(models.Model):
 	_inherit='stock.picking'

@@ -11,12 +11,16 @@
             <xpath expr="//div[@class='row mt16 o_settings_container'][7]" position="inside">
                 <div class="col-12 col-lg-6 o_setting_box" id="pos-cash-control-feature" attrs="{'invisible' : [('cash_control', '=', False)]}">
                     <div class="o_setting_left_pane">
-                        <field name="enable_pos_cash_control"/>
+                        <field name="enable_pos_cash_control" attrs="{'readonly': [('has_active_session','=', True)]}"/>
                     </div>
                     <div class="o_setting_right_pane">
                         <label for="enable_pos_cash_control"/>
                         <div class="text-muted">
                             Show Cash Control Feature in POS
+                        </div>
+                        <div attrs="{'invisible': [('enable_pos_cash_control', '=', False)]}">
+                            <label for="cash_start_balance" string="Cash Start Balance" class="font-weight-normal"/>
+                            <field name="cash_start_balance"/>
                         </div>
                     </div>
                     <t attrs="{'invisible' : [('enable_pos_cash_control', '=', False)]}">

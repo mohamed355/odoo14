@@ -13,6 +13,7 @@ odoo.define('pos_cash_control.pos_cash_control', function (require) {
     const { useListener } = require('web.custom_hooks');
 
     const HeaderButton = require('point_of_sale.HeaderButton');
+    const CashBoxOpening = require('point_of_sale.CashBoxOpening');
     const LoginScreen = require('pos_hr.LoginScreen');
 
 
@@ -44,7 +45,6 @@ odoo.define('pos_cash_control.pos_cash_control', function (require) {
             super(...arguments);
           }
           async closeSession() {
-            console.log(this);
             if(this.env.pos.config.enable_pos_cash_control && this.env.pos.config.close_balance_at_end_session){
               const x = await this._SetClosingBalance();
             }else {
@@ -59,6 +59,14 @@ odoo.define('pos_cash_control.pos_cash_control', function (require) {
           }
 
         };
+
+    const CashStartBalance = (CashBoxOpening) =>
+        class extends CashBoxOpening {
+          constructor() {
+            super(...arguments);
+            this.defaultValue = this.env.pos.config.cash_start_balance || 0;
+          }
+        };
     // class ClosingBalance extends HeaderButton {
     //
     //
@@ -68,6 +76,7 @@ odoo.define('pos_cash_control.pos_cash_control', function (require) {
     // Registries.Component.add(ClosingBalance);
     Registries.Component.extend(HeaderButton, ClosingBalance);
     Registries.Component.extend(LoginScreen, ClosingSessionLogin);
+    Registries.Component.extend(CashBoxOpening, CashStartBalance);
 
 
 
@@ -272,7 +281,11 @@ odoo.define('pos_cash_control.pos_cash_control', function (require) {
         }
         click_confirm(event){
             var self = this;
-            var cash_box_data = self.get_cash_box_data()
+            var cash_box_data = self.get_cash_box_data();
+            if (Object.keys(cash_box_data).length>0) {
+              let last = Object.keys(cash_box_data)[Object.keys(cash_box_data).length-1];
+              cash_box_data[last+1]=[parseInt(1),parseInt(self.env.pos.config.cash_start_balance)]
+            }
             var cash_control_details = {
                 'pos_session_id' : self.env.pos.pos_session.id,
                 'cash_box_data': cash_box_data,
@@ -319,7 +332,8 @@ odoo.define('pos_cash_control.pos_cash_control', function (require) {
 
             var i;
             for (i = 0; i < keys.length; i++) {
-                records[parseInt(keys[i])] = parseInt(values[i])
+              // records[parseInt(keys[i])] = parseInt(values[i])
+                records[i] = [parseInt(keys[i]),parseInt(values[i])]
             }
             return records
         }

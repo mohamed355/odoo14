@@ -23,11 +23,11 @@ odoo.define('pos_industry_client.POSClientListScreenWidget', function(require) {
           } else {
 						partners = this.env.pos.db.get_partners_sorted(1000);
           }
-
+					if (this.env.pos.config.industry_id.length == 0) {
+						return partners.filter(client => !client.industry_id);
+					}
 					return partners.filter(client => client.industry_id && this.env.pos.config.industry_id.includes(client.industry_id[0]));
-
         }
-
 			}
 	Registries.Component.extend(ClientListScreen, PosResClientListScreen);
 

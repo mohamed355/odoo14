@@ -16,6 +16,7 @@ class PosConfig(models.Model):
 
     enable_pos_cash_control = fields.Boolean(string="Cash Control in POS", default=True)
     close_balance_at_end_session = fields.Boolean(string="Requied to Enter Close Balance At the end of Session", default=True)
+    cash_start_balance = fields.Float(string='Cash Start Amount',default=0)
 
 class PosSession(models.Model):
     _inherit = 'pos.session'
@@ -106,6 +107,7 @@ class PosSession(models.Model):
         session_id = self.search([('id', '=', kwargs.get('pos_session_id'))])
         if session_id:
             cash_box_id = session_id.cash_register_id.cashbox_end_id
+
             if cash_box_id:
                 if len(cash_box_id.cashbox_lines_ids):
                     for cashbox_lines_id in cash_box_id.cashbox_lines_ids:
@@ -114,23 +116,26 @@ class PosSession(models.Model):
                 cash_box_line_id = []
                 for value in kwargs.get('cash_box_data'):
                     cash_box_line = {}
-                    cash_box_line['coin_value'] = kwargs.get('cash_box_data')[value]
-                    cash_box_line['number'] = int(value)
+                    cash_box_line['number'] = kwargs.get('cash_box_data')[value][0]
+                    cash_box_line['coin_value'] = int(kwargs.get('cash_box_data')[value][1])
                     cash_box_line['cashbox_id'] = cash_box_id.id
                     cashbox_line_id = self.env['account.cashbox.line'].create(cash_box_line)
                     cash_box_line_id.append(cashbox_line_id.id)
 
                 cash_box_id.cashbox_lines_ids = [cash_box_line_id]
+                # return False
                 return True
             else:
                 cash_box_obj = self.env['account.bank.statement.cashbox']
                 vals = {}
-                vals['cashbox_lines_ids'] = [[0, 0, {'coin_value': kwargs.get('cash_box_data')[value], 'number': int(value)}] for value in kwargs.get('cash_box_data')]
+
+                vals['cashbox_lines_ids'] = [[0, 0, {'number': kwargs.get('cash_box_data')[value][0], 'coin_value': int(kwargs.get('cash_box_data')[value][1])}] for value in kwargs.get('cash_box_data')]
                 result = cash_box_obj.create(vals)
                 session_id.cash_register_id.cashbox_end_id = result.id
                 if session_id.state == 'opened':
                     self.create_closing_entry(kwargs, session_id)
                 return True
+                # return True
         else:
             return False
 
@@ -144,8 +149,8 @@ class PosSession(models.Model):
             cash_box_line_id = []
             for value in kwargs.get('cash_box_data'):
                 cash_box_line = {}
-                cash_box_line['coin_value'] = kwargs.get('cash_box_data')[value]
-                cash_box_line['number'] = int(value)
+                cash_box_line['number'] = kwargs.get('cash_box_data')[value][0]
+                cash_box_line['coin_value'] = int(kwargs.get('cash_box_data')[value][1])
                 cash_box_line['cashbox_id'] = cash_box_id.id
                 cashbox_line_id = self.env['account.cashbox.line'].create(cash_box_line)
                 cash_box_line_id.append(cashbox_line_id.id)

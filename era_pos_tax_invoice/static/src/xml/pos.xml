@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+    <t t-name="OrderReceipt" t-inherit="point_of_sale.OrderReceipt" t-inherit-mode="extension" owl="1">
+         
+        <xpath expr="//div[@class='pos-receipt-order-data']" position="before">
+            <div>
+                <div style="margin:10px; text-align: center; padding:0 13%;">
+                    <span id="qr_data" t-esc="receipt.qr_code" style="display: NONE;"/>
+                    <div id="qrcode" style="width:100%; height:200px; margin-bottom:10px; text-align: center;"></div>
+                    <script type="text/javascript">
+                        var  qrData = document.getElementById("qr_data").innerHTML;
+                        new QRCode(document.getElementById("qrcode"), {"text": qrData ,width:200, height:200, correctLevel : QRCode.CorrectLevel.H});
+                    </script>
+                </div>
+            </div>
+        </xpath>
+    </t>
+
+</templates>

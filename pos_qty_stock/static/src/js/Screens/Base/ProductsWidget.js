@@ -39,7 +39,13 @@ odoo.define('pos_qty_stock.ProductsWidget', function(require) {
 						prod_ids.push(prd.id)
 					});
 					let x_sync = self.env.pos.get("is_sync")
-					let location = self.env.pos.locations;
+					let locations = self.env.pos.locations;
+					let location = locations
+					for(let i = 0; i < locations.length; i++){
+						if(locations[i].id === self.env.pos.config.stock_location_id[0]){
+							location =  locations[i];
+						}
+					}
 					if(x_sync == true){
 						if (self.env.pos.config.pos_stock_type == 'onhand'){
 							this.rpc({
@@ -65,6 +71,7 @@ odoo.define('pos_qty_stock.ProductsWidget', function(require) {
 						}
 						if (self.env.pos.config.pos_stock_type == 'available')
 						{
+
 							this.rpc({
 								model: 'product.product',
 								method: 'get_stock_location_avail_qty',
