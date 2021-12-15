@@ -58,25 +58,24 @@ odoo.define('pos_offline_customers', function (require) {
 		        var config_id = self.env.pos.config_id
 		        var session_id = self.env.pos.pos_session.id;
 		        var dt = new Date();
-				var time = dt.getHours()+""+dt.getMinutes()+""+dt.getSeconds();
+				    var time = dt.getHours()+""+dt.getMinutes()+""+dt.getSeconds();
 		        self.env.uid = dt.getTime()+''+session_id;
 		        processedChanges.uid = self.env.uid;
 		        processedChanges.pos_refrence_id = self.env.uid;
 		       	processedChanges.write_date = "1970-01-01 00:00:00";
-		        processedChanges.id = processedChanges.id || self.env.uid;
-            console.log(processedChanges);
-            console.log(self.env.pos.db.get_partner_by_barcode(processedChanges.barcode));
+            var id = Object.keys(self.env.pos.db.partner_by_id)[Object.keys(self.env.pos.db.partner_by_id).length - 1] + 1;
+            // console.log(last);
+            // var id = Object.keys(self.env.pos.db.partner_by_id).length;
+		        processedChanges.id = processedChanges.id || id;
             if (!processedChanges.barcode || (processedChanges.barcode && !self.env.pos.db.get_partner_by_barcode(processedChanges.barcode))) {
-              console.log("SADFJAKJSFLQEW");
               self.env.pos.db.add_partners([processedChanges]);
   		        self.env.pos.push_customer(processedChanges);
-
   		        var partner = self.env.pos.db.get_partner_by_id(processedChanges.id);
               if (partner) {
                   self.new_client = partner;
               }
+              // alert("Customer saved")
               this.trigger('save-offline-changes', { processedChanges });
-              console.log("skajfbaskjf");
             }else {
               self.showPopup('ErrorPopup', {
                 title: _t('Validation Error'),
@@ -103,11 +102,27 @@ odoo.define('pos_offline_customers', function (require) {
 	            useListener('save-offline-changes', this.saveOfflineChanges);
 	        }
 	        async saveOfflineChanges(event) {
+            var self = this;
 
-                await this.env.pos.load_new_partners();
-                this.state.selectedClient = this.env.pos.db.get_partner_by_id(event.detail.processedChanges.id);
-                this.state.detailIsShown = false;
-                this.render();
+                // let load_new_partners = await this.env.pos.load_new_partners();
+
+                var promise = this.env.pos.load_new_partners();
+                // var promise = await this.env.pos.load_new_partners();
+                promise.then((result) => {
+                    // resolve("NULL");
+                    self.state.selectedClient = self.env.pos.db.get_partner_by_id(event.detail.processedChanges.id);
+                    self.state.detailIsShown = false;
+                    self.render();
+
+                }).catch((message) => {
+                  self.state.selectedClient = self.env.pos.db.get_partner_by_id(event.detail.processedChanges.id);
+                  self.state.detailIsShown = false;
+                  self.render();
+
+                    // reject(message);
+                    //alert(message)
+                });
+
 	        }
     }
 
@@ -118,6 +133,7 @@ odoo.define('pos_offline_customers', function (require) {
         export_as_JSON: function() {
             var json = _super_order.export_as_JSON.apply(this,arguments);
             json.parnter_obj = {};
+
             if(json.partner_id){
             	var parnter_obj = this.pos.db.get_partner_by_id(json.partner_id);
             	if(parnter_obj.uid > 0){
@@ -136,6 +152,7 @@ odoo.define('pos_offline_customers', function (require) {
 	        var partner;
 	        for(var i = 0, len = partners.length; i < len; i++){
 	            partner = partners[i];
+
 	            var local_partner_date = (this.partner_write_date || '').replace(/^(\d{4}-\d{2}-\d{2}) ((\d{2}:?){3})$/, '$1T$2Z');
 	            var dist_partner_date = (partner.write_date || '').replace(/^(\d{4}-\d{2}-\d{2}) ((\d{2}:?){3})$/, '$1T$2Z');
 	            if (    this.partner_write_date &&
@@ -194,6 +211,7 @@ odoo.define('pos_offline_customers', function (require) {
     	add_customer: function(order){
 	        var order_id = order.uid;
 	        var orders  = this.load('customers',[]);
+          console.log("SDASKJDHUWIopipowqpwoqwpqow add_customer");
 	        // if the order was already stored, we overwrite its data
 	        for(var i = 0, len = orders.length; i < len; i++){
 	            if(orders[i].id === order_id){

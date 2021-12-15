@@ -434,11 +434,11 @@ odoo.define('pos_order_return_reprint.pos_order_return', function(require) {
             return loaded;
         },
         getOrderReceiptEnv: function() {
-			var self = this;
-			var result = SuperOrder.prototype.getOrderReceiptEnv.call(this);
-			result.receipt.order = this;
-			return result
-		}
+    			var self = this;
+    			var result = SuperOrder.prototype.getOrderReceiptEnv.call(this);
+    			result.receipt.order = this;
+    			return result
+    		}
     });
 
     // Inherit NumpadWidget-------------
@@ -626,19 +626,17 @@ odoo.define('pos_order_return_reprint.pos_order_return', function(require) {
                         }
                     });
                     $("#reprint_order").on("click", function() {
-
                       var order_id = this.id;
-
                       self.rpc({
                 				model: 'pos.order',
                 				method: 'print_pos_receipt',
                 				args: [order.id],
                 			}).then(function(output) {
                 				let data = output;
-
                 				data['order'] = order;
                 				data['order']['date_order'] = output.date_order
-                				self.showScreen('OrderReprintScreen',data);
+                        console.log(data);
+                        self.showScreen('OrderReprintScreen',data);
                 			});
 
 

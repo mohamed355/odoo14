@@ -33,8 +33,6 @@ odoo.define('pos_order_return_reprint.models', function(require) {
 			var self = this;
 			var temp = Math.floor(100000000000+ Math.random() * 9000000000000)
 			self.barcode =  temp.toString();
-			console.log("ASDASDASFEDFD");
-			console.log(self.barcode);
 		},
 
 

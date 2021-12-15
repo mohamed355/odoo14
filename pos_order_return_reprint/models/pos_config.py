@@ -8,4 +8,4 @@ class pos_config(models.Model):
 	_inherit = 'pos.config'
 
 	# pos orders screen
-	show_barcode = fields.Boolean('Show Barcode in Receipt',default=True)
+	show_barcode = fields.Boolean('Show Barcode in Receipt', defualt=True)

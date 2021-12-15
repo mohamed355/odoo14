@@ -47,7 +47,7 @@
                 <br/>
                 <t t-if="env.pos.company.name_arabic">
                     <div style="font-size:18pt;font-weight:bold">
-                        <span t-esc="env.pos.name_arabic" style="text-size:12pt"/>
+                        <span t-esc="env.pos.company.name_arabic" style="text-size:12pt"/>
                         <br/>
                     </div>
                 </t>

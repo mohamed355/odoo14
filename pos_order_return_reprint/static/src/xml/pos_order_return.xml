@@ -311,8 +311,10 @@
   					</div>
   					<div class="pos-receipt-container">
   						<OrderReprintReceipt
-  							order="props.order"
-  							barcode = "props.barcode"
+                order="props.order"
+  							partner_id="props.partner_id"
+                barcode = "props.barcode"
+  							qr_code = "props.qr_code"
   							discount = "props.discount"
   							orderlines = "props.orderlines"
   							paymentlines = "props.paymentlines"
@@ -328,107 +330,307 @@
   	</t>
 
   	<t t-name="OrderReprintReceipt" owl="1">
-  		<div class="pos-receipt">
-  			<img class="pos-receipt-logo" t-att-src='env.pos.company_logo_base64' alt="Logo"/>
-  			<br/>
-  			<div class="pos-receipt-contact">
-  				<t t-if='env.pos.company.contact_address'>
-  					<div><t t-esc='env.pos.company.contact_address' /></div>
-  				</t>
-  				<t t-if='env.pos.company.phone'>
-  					<div>Tel:<t t-esc='env.pos.company.phone' /></div>
-  				</t>
-  				<t t-if='env.pos.company.vat'>
-  					<div>VAT:<t t-esc='env.pos.company.vat' /></div>
-  				</t>
-  				<t t-if='env.pos.company.email'>
-  					<div><t t-esc='env.pos.company.email' /></div>
-  				</t>
-  				<t t-if='env.pos.company.website'>
-  					<div><t t-esc='env.pos.company.website' /></div>
-  				</t>
-  				<br/>
 
-  				<t t-if='props.user_name'>
-  					<div class='cashier'>
-  						<div>--------------------------------</div>
-  						<div>Served by <t t-esc='props.user_name' /></div>
-  					</div>
-  				</t>
+      <div class="pos-receipt">
+        <t t-if="env.pos.company_logo_base64">
+            <img class="pos-receipt-logo" t-att-src="env.pos.company_logo_base64" alt="Logo"/>
+        </t>
+        <!-- <t t-if="!env.pos.company_logo_base64">
+            <h2 class="pos-receipt-center-align">
+                <t t-esc="env.pos.company.name" />
+            </h2>
+            <br/>
+        </t> -->
+  			<!-- <img class="pos-receipt-logo" t-att-src='env.pos.company_logo_base64' alt="Logo"/>
+  			<br/> -->
+        <div class="pos-receipt-center-align">
+          <strong><t t-esc="env.pos.company.name"/></strong>
+        </div>
+
+  			<div class="pos-receipt-contact">
+
+          <t t-if="env.pos.company.contact_address">
+              <div><strong><t t-esc="env.pos.company.contact_address"/></strong></div>
+          </t>
+          <t t-if="env.pos.company.street"><span t-esc="env.pos.company.street"/>,
+          </t>
+          <t t-if="env.pos.company.street2"><span t-esc="env.pos.company.street2"/>,
+          </t>
+          <t t-if="env.pos.company.city"><span t-esc="env.pos.company.city"/>,
+          </t>
+          <t t-if="env.pos.company.state_id"><span t-esc="env.pos.company.state_id"/>.
+          </t>
+  				<br/>
+          <t t-if="env.pos.company.name_arabic">
+              <div style="font-size:18pt;font-weight:bold">
+                  <span t-esc="env.pos.company.name_arabic" style="text-size:12pt"/>
+                  <br/>
+              </div>
+          </t>
+
+          <table style="margin-top:5pt;padding:5pt; border-bottom:1pt dashed black; font-weight:bold;">
+              <colgroup>
+                  <col width='24%'/>
+                  <col width='1%'/>
+                  <col width='49%'/>
+                  <col width='1%'/>
+                  <col width='25%'/>
+              </colgroup>
+              <t t-if="env.pos.company.vat">
+                <tr>
+                    <td style="vertical-align:bottom; font-weight:bold;">
+                        VAT Reg. No
+                    </td>
+                    <td style="vertical-align:bottom;padding-left:3pt; font-weight:bold;">:</td>
+                    <td style="text-align:center;vertical-align:bottom;padding-right:5pt; font-weight:bold;">
+                        <t t-esc="env.pos.company.vat" style="text-align:center; font-weight:bold;"/>
+                    </td>
+                    <td style="vertical-align:bottom;padding-right:3pt; font-weight:bold;">:</td>
+                    <td style="text-align:right;vertical-align:bottom;text-size:7pt; font-weight:bold;">
+                        رقم الضريبي
+                    </td>
+                </tr>
+              </t>
+          </table>
+
+          <!-- <t t-if="receipt.header">
+              <div style='text-align:center;padding-top:5pt; font-weight:bold;'>
+                  <t t-esc="receipt.header"/>
+              </div>
+              <br/>
+          </t> -->
+          <br/>
+          <div style="font-weight:bold;padding-bottom:5pt;padding-top:0pt; border-bottom:1pt dashed black;"> INVOICE فاتورة </div>
+          <br/>
+  				<br/>
   			</div>
+        <div class="orderlines">
+            <table style="border-bottom:1pt dashed black;margin-top:-20pt;padding:5pt;font-size:9pt; font-weight:bold;">
+                <colgroup>
+                    <col width='24%'/>
+                    <col width='1%'/>
+                    <col width='49%'/>
+                    <col width='1%'/>
+                    <col width='25%'/>
+                </colgroup>
+                <tr>
+                    <td style="vertical-align:bottom;">
+                        Invoice No
+                    </td>
+                    <td style="vertical-align:bottom;padding-left:3pt; font-weight:bold;">:</td>
+                    <td style="text-align:center;vertical-align:bottom;padding-right:5pt; font-weight:bold;">
+                        <t t-esc="props.order.pos_reference"/>
+                    </td>
+                    <td style="vertical-align:bottom;padding-right:3pt; font-weight:bold;">:</td>
+                    <td style="text-align:right;vertical-align:bottom;text-size:7pt; font-weight:bold;">
+                        رقم الفاتورة
+                    </td>
+                </tr>
+                <tr>
+                    <td style="vertical-align:bottom;padding-top:3pt;padding-bottom:3pt; font-weight:bold;">Date</td>
+                    <td style="vertical-align:bottom;padding-top:3pt;padding-bottom:3pt;padding-left:3pt; font-weight:bold;">:</td>
+                    <td style="vertical-align:bottom;text-align:center;padding-top:5pt;padding-bottom:3pt;padding-right:3pt; font-weight:bold;">
+                        <t t-esc="props.order.date_order"/>
+                    </td>
+                    <td style="vertical-align:bottom;padding-top:3pt;padding-bottom:3pt; font-weight:bold;">:</td>
+                    <td style="text-align:right;vertical-align:bottom;text-size:7pt;padding-top:3pt;padding-bottom:3pt;padding-right:3pt; font-weight:bold;">
+                        التاريخ
+                    </td>
+                </tr>
+
+                <t t-if="props.partner_id">
+                  <tr>
+                      <td style="vertical-align:bottom;padding-top:3pt;padding-bottom:3pt; font-weight:bold;">Customer</td>
+                      <td style="vertical-align:bottom;padding-top:3pt;padding-bottom:3pt;padding-left:3pt; font-weight:bold;">:</td>
+                      <td style="text-align:center;vertical-align:bottom;padding-right:5pt;padding-top:3pt;padding-bottom:3pt; font-weight:bold;">
+                          <t t-esc="props.partner_id.name"/>
+                      </td>
+                      <td style="vertical-align:bottom;padding-top:3pt;padding-bottom:3pt;padding-right:3pt; font-weight:bold;">:</td>
+                      <td style="text-align:right;vertical-align:bottom;text-size:7pt;padding-top:3pt;padding-bottom:3pt; font-weight:bold;">
+                          العميل
+                      </td>
+                  </tr>
+                  <tr t-if="props.partner_id.vat">
+                      <td style="vertical-align:bottom;padding-top:3pt;padding-bottom:3pt; font-weight:bold;">Vat No.</td>
+                      <td style="vertical-align:bottom;padding-top:3pt;padding-bottom:3pt;padding-left:3pt; font-weight:bold;">:</td>
+                      <td style="text-align:center;vertical-align:bottom;padding-right:5pt;padding-top:3pt;padding-bottom:3pt; font-weight:bold;">
+                          <t t-esc="props.partner_id.vat"/>
+                      </td>
+                      <td style="vertical-align:bottom;padding-top:3pt;padding-bottom:3pt;padding-right:3pt; font-weight:bold;">:</td>
+                      <td style="text-align:right;vertical-align:bottom;text-size:7pt;padding-top:3pt;padding-bottom:3pt; font-weight:bold;">
+                        رقم الضريبى
+                      </td>
+                  </tr>
+                </t>
+                <tr>
+                    <td style="vertical-align:bottom;padding-top:3pt;padding-bottom:3pt">Sales Person</td>
+                    <td style="vertical-align:bottom;padding-top:3pt;padding-bottom:3pt;padding-left:3pt">:</td>
+                    <td style="text-align:center;vertical-align:bottom;padding-right:5pt;padding-top:3pt;padding-bottom:3pt">
+                        <t t-esc="props.user_name"/>
+                    </td>
+                    <td style="vertical-align:bottom;padding-top:3pt;padding-bottom:3pt;padding-right:3pt; font-weight:bold;">:</td>
+                    <td style="text-align:right;vertical-align:bottom;text-size:7pt;padding-top:3pt;padding-bottom:3pt; font-weight:bold;">
+                        مندوب مبيعات
+                    </td>
+                </tr>
+
+            </table>
+
+
+            <table style="margin-top:5pt;padding:5pt;border-bottom:1pt dashed black;font-size:9pt;width:100%; font-weight:bold;" class='receipt-orderlines'>
+                 <colgroup>
+                    <col width='22%'/>
+                    <col width='12%'/>
+                    <col width='21%'/>
+                    <col width='45%'/>
+                </colgroup>
+                <tr>
+                    <th style="border-bottom:1pt dashed black;vertical-align:bottom; margin-bottom:5pt;padding-bottom:3pt; font-weight:bold;">
+                        مبلغ<br/>AMOUNT
+                    </th>
+                    <th style="border-bottom:1pt dashed black;vertical-align:bottom;text-align:right;margin-bottom:5pt;padding-bottom:3pt; font-weight:bold;">
+                        الكمية<br/>QTY
+                    </th>
+                    <th style="border-bottom:1pt dashed black;vertical-align:bottom;text-align:right;margin-bottom:5pt;padding-bottom:3pt; font-weight:bold;">
+                        السعر<br/>PRICE
+                    </th>
+                    <th style="border-bottom:1pt dashed black;vertical-align:bottom;text-align:right;margin-bottom:5pt;padding-bottom:3pt; font-weight:bold;">
+                        اسم العنصر<br/>ITEM NAME
+                    </th>
+                </tr>
+                <tr t-foreach="props.orderlines" t-as="orderline" style="margin-top:5pt">
+                    <td style="padding-bottom:3pt;padding-top:2pt;vertical-align:top; font-weight:bold;">
+                      <t t-esc="env.pos.format_currency(orderline.price_unit*orderline.qty)"/>
+                    </td>
+                    <td style="padding-bottom:3pt;padding-top:2pt;vertical-align:top; font-weight:bold;" class="pos-right-align">
+                        <t t-esc="orderline.qty"/>
+                    </td>
+
+                    <td style="padding-bottom:3pt;padding-top:2pt;vertical-align:top; font-weight:bold;" class="pos-right-align">
+                        <t t-esc="env.pos.format_currency(orderline.price_unit)"/>
+                    </td>
+
+
+                    <td style="text-align:right;padding-bottom:3pt;padding-top:2pt;vertical-align:top; font-weight:bold;">
+                        <t t-esc="orderline.product_id"/>
+                        <t t-if="orderline.product_name_arabic">
+                            <br/>
+                            <t t-esc="orderline.product_name_arabic"/>
+                        </t>
+                        <t t-if="orderline.discount > 0">
+                            <div class="pos-disc-font">
+                                With a<t t-esc="orderline.discount"/>% discount
+                            </div>
+                        </t>
+                    </td>
+                </tr>
+            </table>
+
+
+            <table style="border-bottom:1pt dashed black;font-size:10pt;margin-bottom:-20pt; font-weight:bold;" class='receipt-total'>
+                <colgroup>
+                    <col width='24%'/>
+                    <col width='1%'/>
+                    <col width='56%'/>
+                    <col width='1%'/>
+                    <col width='18%'/>
+                </colgroup>
+                <tr>
+                    <td style="padding-bottom:5pt;padding-top:5pt; font-weight:bold;">TOTAL</td>
+                    <td style="padding-bottom:5pt;padding-top:5pt; font-weight:bold;">:</td>
+                    <td style="text-align:center;padding-bottom:5pt;padding-top:5pt;padding-right:6pt; font-weight:bold;">
+                        <t t-esc="env.pos.format_currency(props.order.amount_total)"/>
+                    </td>
+                    <td style="padding-bottom:5pt;padding-top:5pt; font-weight:bold;">:</td>
+                    <td style="text-align:right;padding-bottom:5pt;padding-top:5pt; font-weight:bold;">مجموع</td>
+                </tr>
+                <tr>
+                    <td style="padding-bottom:5pt;padding-top:5pt; font-weight:bold;">Tax</td>
+                    <td style="padding-bottom:5pt;padding-top:5pt; font-weight:bold;">:</td>
+                    <td style="text-align:center;padding-bottom:5pt;padding-top:5pt;padding-right:6pt; font-weight:bold;">
+                        <t t-esc="env.pos.format_currency(props.tax)"/>
+                    </td>
+                    <td style="padding-bottom:5pt;padding-top:5pt; font-weight:bold;">:</td>
+                    <td style="text-align:right;padding-bottom:5pt;padding-top:5pt; font-weight:bold;">ضريبة</td>
+                </tr>
+
+                <tr>
+                    <t t-if="discount_total">
+                        <td>Discount</td>
+                        <td>:</td>
+                        <td style="text-align:center;padding-bottom:5pt;padding-top:5pt;padding-right:6pt; font-weight:bold;">
+                            <span  t-esc="env.pos.format_currency(props.discount)" class="pos-receipt-center-align"/>
+                        </td>
+                        <td>:</td>
+                        <td style="text-align:right; font-weight:bold;">خصم</td>
+                    </t>
+                </tr>
+                <tr style="border-bottom:1pt dashed black">
+                    <td style="padding-bottom:5pt; font-weight:bold;">NET AMOUNT</td>
+                    <td style="padding-bottom:5pt; font-weight:bold;">:</td>
+                    <td style="text-align:center;padding-bottom:5pt;padding-top:5pt;padding-right:6pt; font-weight:bold;">
+                        <t t-esc="env.pos.format_currency(props.order.amount_total)"/>
+                    </td>
+                    <td style="padding-bottom:5pt; font-weight:bold;">:</td>
+                    <td style="text-align:right;padding-bottom:5pt; font-weight:bold;">الصافي</td>
+                </tr>
+
+                <t t-foreach="props.paymentlines" t-as="line">
+                    <tr>
+                        <td style="vertical-align:bottom">
+                            <t t-esc="line.name"/>
+
+                        </td>
+                        <td style="vertical-align:bottom; font-weight:bold;">:</td>
+                        <td style="vertical-align:bottom;padding-right:6pt; font-weight:bold;" class="pos-center-align">
+                            <t t-esc="env.pos.format_currency(line.amount)"/>
+                        </td>
+                        <td style="vertical-align:bottom; font-weight:bold;">:</td>
+                        <td style="text-align:right;vertical-align:bottom; font-weight:bold;">استلم</td>
+                    </tr>
+                </t>
+                <tr>
+                    <td style="padding-bottom:5pt; font-weight:bold;">Change</td>
+                    <td style="padding-bottom:5pt; font-weight:bold;">:</td>
+                    <td style="padding-bottom:5pt;padding-right:6pt; font-weight:bold;" class="pos-center-align">
+                        <t t-esc="env.pos.format_currency(-props.change)"/>
+                    </td>
+                    <td style="padding-bottom:5pt; font-weight:bold;">:</td>
+                    <td style="padding-bottom:5pt;text-align:right; font-weight:bold;">الباقي</td>
+                </tr>
+            </table>
+        </div>
   			<br /><br />
-  			<div class='orderlines'>
-  				<t t-foreach='props.orderlines' t-as='line'>
-  					<t t-set='simple' t-value='(line.discount === 0 and line.qty === 1)' />
-  					<div t-if='simple'>
-  						<t t-esc="line.product_id"/>
-  						<span t-esc='env.pos.format_currency_no_symbol(line.total_price)' class="price_display pos-receipt-right-align"/>
-  					</div>
-  					<t t-if='!simple'>
-  						<div t-esc='line.product_id'/>
-  						<t t-if='line.discount !== 0'>
-  							<div class="pos-receipt-left-padding">
-  								<t t-esc="env.pos.format_currency_no_symbol(line.price_unit)"/>
-  							</div>
-  							<div class="pos-receipt-left-padding">
-  								Discount: <t t-esc='line.discount' />%
-  							</div>
-  						</t>
-  						<div class="pos-receipt-left-padding">
-  							<t t-esc="Math.round(line.qty)"/>
-  							x
-  							<t t-esc='env.pos.format_currency_no_symbol(line.total_price/line.qty)' />
-  							<span class="price_display pos-receipt-right-align">
-  								<t t-esc='env.pos.format_currency_no_symbol(line.total_price)'/>
-  							</span>
-  						</div>
-  					</t>
-  				</t>
-  			</div>
-  			<div class="pos-receipt-right-align">--------</div>
-  			<br/>
-  			<div class="pos-receipt-amount">
-  				TOTAL
-  				<span t-esc='env.pos.format_currency(props.order.amount_total)' class="pos-receipt-right-align"/>
-  			</div>
-  			<br/><br/>
-  			<t t-foreach='props.paymentlines' t-as='line'>
-  				<div>
-  					<t t-esc='line.name' />
-  					<span t-esc='env.pos.format_currency_no_symbol(line.amount)' class="pos-receipt-right-align"/>
-  				</div>
-  			</t>
-  			<br/>
-  			<div class="pos-receipt-amount receipt-change">
-  				CHANGE
-  				<span t-esc='env.pos.format_currency(-props.change)' class="pos-receipt-right-align"/>
-  			</div>
-  			<br/>
-  			<t t-if='discount_total'>
-  				<div>
-  					Discounts
-  					<span t-esc='env.pos.format_currency(props.discount)' class="pos-receipt-right-align"/>
-  				</div>
-  			</t>
-  			<div>
-  				Total Taxes
-  				<span t-esc='env.pos.format_currency(props.tax)' class="pos-receipt-right-align"/>
-  			</div>
+
   			<div class='before-footer' />
   			<br/>
-  			<div class="pos-receipt-order-data">
-  				<div><t t-esc='props.order.pos_reference' /></div>
-  				<div><t t-esc='props.order.date_order' /></div>
 
-  			</div>
   			<t t-if="env.pos.config.show_barcode">
   				<div>
   					<span style="display:none;" t-esc="receiptBarcode"/>
   					<div style="margin:auto;margin-top:10px;" id="barcode_print1"></div>
   				</div>
   			</t>
-  		</div>
-  	</t>
+        <div>
+            <div style="margin:10px; text-align: center; padding:0 13%;">
+                <span id="qr_data" t-esc="props.qr_code" style="display: NONE;"/>
+                <div id="qrcode" style="width:100%; height:200px; margin-bottom:10px; text-align: center;"></div>
+                <script type="text/javascript">
+                    var  qrData = document.getElementById("qr_data").innerHTML;
+                    new QRCode(document.getElementById("qrcode"), {"text": qrData ,width:200, height:200, correctLevel : QRCode.CorrectLevel.H});
+                </script>
+            </div>
+        </div>
+
+        <br/>
+        <div class="pos-receipt-order-data">
+            <div><t t-esc="props.order.pos_reference"/></div>
+            <div><t t-esc="props.order.date_order"/></div>
+        </div>
+      </div>
+
+
+    </t>
 
 
 </templates>

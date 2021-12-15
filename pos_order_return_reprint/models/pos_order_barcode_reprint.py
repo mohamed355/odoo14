@@ -39,11 +39,14 @@ class pos_order(models.Model):
 		orderlines = []
 		paymentlines = []
 		discount = 0
+		partner_id = False
 
 		for orderline in self.lines:
 			new_vals = {
 				'product_id': orderline.product_id.name,
+				'product_name_arabic': orderline.product_id.name_arabic,
 				'total_price' : orderline.price_subtotal_incl,
+				'total_price_without_tax' : orderline.price_subtotal,
 				'qty': orderline.qty,
 				'price_unit': orderline.price_unit,
 				'discount': orderline.discount,
@@ -60,14 +63,20 @@ class pos_order(models.Model):
 				}
 				paymentlines.append(temp)
 		tz = pytz.timezone(self.user_id.tz or 'UTC')
+
+		if self.partner_id:
+			partner_id = {'name':self.partner_id.name,'vat':self.partner_id.vat}
+
 		vals = {
 			'discount': discount,
+			'partner_id': partner_id,
 			'orderlines': orderlines,
 			'paymentlines': paymentlines,
 			'change': self.amount_return,
 			'subtotal': self.amount_total - self.amount_tax,
 			'tax': self.amount_tax,
 			'barcode': self.barcode,
+			'qr_code': self.qr_code,
 			'user_name' : self.user_id.name,
 			'date_order':self.date_order.now(tz=tz).strftime("%Y-%m-%d %H:%M:%S")
 		}
