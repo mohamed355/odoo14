@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<record id="action_einvoice_saudi" model="ir.actions.report">
+			<field name="name">E-invoice Saudi</field>
+			<field name="model">account.move</field>
+			<field name="report_type">qweb-pdf</field>
+			<field name="report_name">einv_sa.report_einvoice_saudi_document</field>
+			<field name="report_file">einv_sa.report</field>
+			<field name="print_report_name">'E-invoice %s' %(object.name)</field>
+            <field name="binding_model_id" ref="model_account_move"/>
+            <field name="binding_type">report</field>
+		</record>
+	</data>
+</odoo>

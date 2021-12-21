@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<!--Bridge template-->
+		<template id="header_einvoice_saudi_document">
+			<!-- Multicompany -->
+			<t t-if="not o and doc">
+				<t t-set="o" t-value="doc"/>
+			</t>
+            <t t-if="o and 'company_id' in o">
+				<t t-set="company" t-value="o.company_id.sudo()"/>
+			</t>
+			<t t-if="not o or not 'company_id' in o">
+				<t t-set="company" t-value="res_company"/>
+			</t>
+
+            <!--call to the header template-->
+			<t t-call="einv_sa.custom_header_layout"/>
+
+			<!--call to the body template-->
+			<div class="article">
+				<t t-raw="0"/>
+			</div>
+
+			<!--Footer template-->
+			<div t-attf-class="o_company_#{company.id}_layout footer o_background_footer">
+				<div class="text-center">
+					<ul class="list-inline">
+						<li t-if="company.phone" class="list-inline-item">
+							<i class="fa fa-phone" role="img" aria-label="Phone" title="Phone"/>
+							<span class="o_force_ltr" t-field="company.phone"/>
+						</li>
+						<li t-if="company.email" class="list-inline-item">
+							<i class="fa fa-at" role="img" aria-label="Email" title="Email"/>
+							<span t-field="company.email"/>
+						</li>
+						<li t-if="company.website" class="list-inline-item">
+							<i class="fa fa-globe" role="img" aria-label="Website" title="Website"/>
+							<span t-field="company.website"/>
+						</li>
+						<li t-if="company.vat" class="list-inline-item">
+							<i class="fa fa-building-o" role="img" aria-label="Fiscal number"/>
+							<t t-esc="company.country_id.vat_label or 'Tax ID'"/>: <span t-field="company.vat"/>
+						</li>
+					</ul>
+					<div t-field="company.report_footer"/>
+					<div t-if="report_type == 'pdf'" class="text-muted">
+						Page:
+						<span class="page"/>
+						of
+						<span class="topage"/>
+					</div>
+				</div>
+			</div>
+		</template>
+
+        <!--Template header-->
+		<!-- <template id="custom_header_layout">
+			<div class="header">
+				<div class="row" style="margin:0px -20px -20px -20px!important;padding:0px!important;">
+					<div class="col-12">
+						<img class="col-12" src="/einv_sa/static/src/img/header.jpg"/>
+					</div>
+				</div>
+			</div>
+		</template> -->
+	</data>
+</odoo>

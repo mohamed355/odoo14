@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="ir.ui.view" id="view_res_bank_form_inherit">
+        <field name="name">view.res.bank.form.inherit</field>
+        <field name="model">res.bank</field>
+        <field name="inherit_id" ref="base.view_res_bank_form"/>
+        <field name="arch" type="xml">
+          <field name="email" position="after">
+            <field name="swift_code"/>
+          </field>
+        </field>
+    </record>
+</odoo>

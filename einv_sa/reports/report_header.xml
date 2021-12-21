@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<!--Bridge template-->
+		<template id="header_einvoice_saudi_document">
+			<!-- Multicompany -->
+			<t t-if="not o and doc">
+				<t t-set="o" t-value="doc"/>
+			</t>
+      <t t-if="o and 'company_id' in o">
+				<t t-set="company" t-value="o.company_id.sudo()"/>
+			</t>
+			<t t-if="not o or not 'company_id' in o">
+				<t t-set="company" t-value="res_company"/>
+			</t>
+
+            <!--call to the header template-->
+						<!-- <t t-call="web.external_layout_standard"/> -->
+			<t t-call="einv_sa.custom_header_layout"/>
+
+			<!--call to the body template-->
+			<div class="article">
+				<t t-raw="0"/>
+			</div>
+
+			<!--Footer template-->
+
+			<div t-attf-class="o_company_#{company.id}_layout footer o_background_footer">
+				<div class="text-center">
+					<ul class="list-inline mb4">
+							<!-- using the list-inline-item class from bootstrap causes weird behaviours in pdf report
+									 adding d-inline class fixes the problem-->
+							<li t-if="company.phone" class="list-inline-item d-inline"><span class="o_force_ltr" t-field="company.phone"/></li>
+							<li t-if="company.email" class="list-inline-item d-inline"><span t-field="company.email"/></li>
+							<li t-if="company.website" class="list-inline-item d-inline"><span t-field="company.website"/></li>
+							<li t-if="company.vat" class="list-inline-item d-inline"><t t-esc="company.country_id.vat_label or 'Tax ID'"/>: <span t-field="company.vat"/></li>
+					</ul>
+
+					<div name="financial_infos">
+							<span t-field="company.report_footer"/>
+					</div>
+					<div t-if="report_type == 'pdf'" class="text-muted">
+						Page:
+						<span class="page"/>
+						of
+						<span class="topage"/>
+					</div>
+				</div>
+			</div>
+
+
+		</template>
+
+        <!--Template header-->
+		<template id="custom_header_layout">
+
+			<div class="header">
+				<div class="row m-0">
+					<img t-if="company.logo" t-att-src="image_data_uri(company.logo)" style="margin-left:250px;height:125px;" alt="Logo"/>
+					<!-- <img t-att-src="'/report/barcode/?type=%s&amp;value=%s' %('QR', o.einv_qr)" style="margin-left:125px;width:125px;height:125px;"/> -->
+					<img t-if="o.l10n_sa_qr_code_str"
+							 style="margin-left:125px;width:125px;height:125px;"
+							 t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s'%('QR', o.l10n_sa_qr_code_str, 150, 150)"/>
+				</div>
+			</div>
+		</template>
+	</data>
+</odoo>
